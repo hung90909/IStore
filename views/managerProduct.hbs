@@ -1,0 +1,46 @@
+<div class="container">
+    <a href="/admin/home"><h1>List Products</h1></a>
+    <!-- Search box -->
+    <div class="form-group">
+        <input type="text" class="form-control" id="searchInput" placeholder="Search...">
+
+    </div>
+    <!-- Table to display user list -->
+    <div class=" text-right float-right">
+        <a href="/admin/addProduct" class="btn btn-primary">Add Product</a>
+    </div>
+    <table class="table table-striped" style="margin-top: 20px;">
+        <thead>
+            <tr>
+                <th>Mã SP</th>
+                <th>Tên SP</th>
+                <th>Giá</th>
+                <th>Hình Ảnh</th>
+                <th>Màu</th>
+                <th>Loại SP</th>
+                <th>Mã KH</th>
+                <th>Tên KH</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="">
+            {{#each product}}
+            <tr>
+                <td>{{this.code_product}}</td>
+                <td>{{this.name_product}}</td>
+                <td>{{this.price}}$</td>
+                <td><img src="{{this.image}}" style="width: 50px; height: 50px; border-radius: 50%;
+                border-color: black; border-width: 10px;" /></td>
+                <td>{{this.color}}</td>
+                <td>{{this.type_product}}</td>
+                <td>{{this.id_KH}}</td>
+                <td>{{this.name_KH}}</td>
+                <td>
+                    <a href="/admin/editProduct/{{this._id}}" class="btn btn-primary">Edit</a>
+                    <a href="/admin/deleteProduct/{{this._id}}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

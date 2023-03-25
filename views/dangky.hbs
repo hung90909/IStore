@@ -1,0 +1,21 @@
+ <h2>Đăng ký</h2>
+    <form action="admin/dangkyAdmin" method="POST">
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Mật khẩu:</label>
+        <input type="password" class="form-control" id="password" placeholder="Enter password" name="passWord" required>
+      </div>
+      <div class="form-group">
+        <label for="name">Họ và tên:</label>
+        <input type="text" class="form-control" id="name" placeholder="Enter name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="image">Hình ảnh:</label>
+        <input type="file" class="form-control-file" id="image" name="image">
+      </div>
+      <input type="submit" class="btn btn-primary" value="Đăng Ký">
+     <a href="/admin/loginAdmin" class="btn btn-info">Đăng Nhập</a>
+    </form>
