@@ -1,10 +1,33 @@
-<div class="container">
-    <a href="/admin/home"><h1>List Products</h1></a>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/admin/getAllUsers">Shop Clothes</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li > <a href="/admin/getAllUsers">User</a></li>
+            <li class="active"><a href="/admin/getAllProducts">Sản Phẩm</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right" >
+            <li class="dropdown ">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Đăng xuất
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Đổi Mật Khẩu</a></li>
+                    <li><a href="/admin/logout">Đăng xuất</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+{{!-- <div class="container">
+    <a href="/admin/home">
+        <h1>List Products</h1>
+    </a>
     <!-- Search box -->
     <div class="form-group">
         <input type="text" class="form-control" id="searchInput" placeholder="Search...">
 
-    </div>
+    </div> --}}
     <!-- Table to display user list -->
     <div class=" text-right float-right">
         <a href="/admin/addProduct" class="btn btn-primary">Add Product</a>
@@ -37,7 +60,7 @@
                 <td>{{this.name_KH}}</td>
                 <td>
                     <a href="/admin/editProduct/{{this._id}}" class="btn btn-primary">Edit</a>
-                    <a href="/admin/deleteProduct/{{this._id}}" class="btn btn-danger">Delete</a>
+                    <a href="/admin/deleteProduct/{{this._id}}"  onclick="return confirm('Bạn có chắc muốn xóa không ?')" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
             {{/each}}

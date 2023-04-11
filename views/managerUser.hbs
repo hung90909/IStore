@@ -1,14 +1,44 @@
-{{{titleView}}}
+<nav class="navbar navbar-inverse ">
+    <div class="container-fluid row" style="position: relative;">
+        <div class="col-sm-4">
+            <div class="navbar-header">
+                <a class="navbar-brand "  href="/admin/getAllUsers">Shop Clothes</a>
+            </div>
+            <ul class="nav navbar-nav ">
+                <li class="active"><a  href="/admin/getAllUsers">User</a></li>
+                <li><a href="/admin/getAllProducts">Sản Phẩm</a></li>
+            </ul>
+        </div>
+
+        <div class="col-sm-4" style="margin-top: 8px; position: absolute; margin-left: 600px;">
+            <form action="/admin/search">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Search..." name="search">
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-4" style="float: right;">
+            <ul class="nav navbar-nav navbar-right ">
+                <li class="dropdown ">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Đăng xuất
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Đổi Mật Khẩu</a></li>
+                        <li><a href="/admin/logout">Đăng xuất</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</nav>
+{{!-- {{{titleView}}}
 <div class="container">
     <a href="/admin/home">
         <h1>List Users</h1>
-    </a>
+    </a> --}}
     <!-- Search box -->
-    <form action="/admin/search">
-        <div class="form-group">
-            <input type="text" class="form-control" id="searchInput" placeholder="Search..." name="search">
-        </div>
-    </form>
+
 
     <!-- Table to display user list -->
     <div class=" text-right float-right">
@@ -21,7 +51,7 @@
                 <th>Image</th>
                 <th>Name</th>
                 <th>Email</th>
-                <th>PassWord</th>
+                <th>Password</th>
                 <th></th>
             </tr>
         </thead>
@@ -29,14 +59,14 @@
             {{#each users}}
             <tr>
                 <th scope="row">{{sum @index 1}}</th>
-                <td><img src="{{this.image}}" style="width: 50px; height: 50px; border-radius: 50%;
+                <td><img src={{this.image}} style="width: 50px; height: 50px; border-radius: 50%;
                 border-color: black; border-width: 10px;" /> </td>
                 <td>{{this.name}}</td>
                 <td>{{this.email}}</td>
-                <td>{{this.password}}</td>
+                <td style="font-size: 20px;">**********</td>
                 <td>
                     <a href="/admin/edit/{{this._id}}" class="btn btn-primary">Edit</a>
-                    <a href="/admin/delete/{{this._id}}" class="btn btn-danger">Delete</a>
+                    <a href="/admin/delete/{{this._id}}"  onclick="return confirm('Bạn có chắc muốn xóa không ?')" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
             {{/each}}
