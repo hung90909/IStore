@@ -8,8 +8,6 @@ const path = require('path');
 var jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs');
 const bodyParser = require('body-parser');
-// const passport = require('passport');
-// const LocalStrategy = require('passport-local').Strategy;
 const cookieParser = require('cookie-parser');
 
 const app = express()
@@ -216,7 +214,7 @@ app.get("/edit/:id", verifyToken, async (req, res) => {
 })
 
 app.put("/inserUsers/:id", verifyToken, upload.single("image"), async (req, res) => {
-
+   console.log(req.body)
    const { name, email, passWord } = req.body;
    const imagePath = req.file.path;
    const image = await jimp.read(imagePath);
@@ -225,7 +223,7 @@ app.put("/inserUsers/:id", verifyToken, upload.single("image"), async (req, res)
    Admin.updateOne({ _id: req.params.id }, { name, email, passWord, image: base64Image })
       .then(() => res.redirect("/admin/getAllUsers"))
       .catch(err => console.error(err))
-})
+})  
 
 app.get("/addUsers", verifyToken, (req, res) => {
    res.render("addUser", {

@@ -8,8 +8,6 @@ const path = require('path');
 var jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs');
 const bodyParser = require('body-parser');
-// const passport = require('passport');
-// const LocalStrategy = require('passport-local').Strategy;
 const cookieParser = require('cookie-parser');
 
 const app = express()
@@ -47,8 +45,8 @@ app.post('/dangkyAdmin', upload.single("image"), async (req, res) => {
       const password = req.body.passWord;
       const name = req.body.name;
       const role = req.body.role;
-      const filename = req.file ? req.file.filename : null; // kiểm tra xem req.file có tồn tại hay không
       const checkEmail = await Admin.findOne({ email: email })
+      console.log(checkEmail)
       if (checkEmail) {
          const err = "Email đã tồn tại !"
          res.status(400).send(err)
@@ -56,17 +54,25 @@ app.post('/dangkyAdmin', upload.single("image"), async (req, res) => {
             error: err
          })
       } else {
-         const imagePath = req.file.path;
-         const img = await jimp.read(imagePath);
-         const baseImage = await img.getBase64Async(jimp.AUTO)
-         const admin = new Admin({ email: email, passWord: password, name: name, role: role, image: baseImage });
-        
-         await admin.save();
-         res.redirect('/admin/loginAdmin'); // chuyển hướng người dùng đến trang khác
+         if (req.file && req.file.path) {
+            // thực hiện đoạn code khi có path 
+            const imagePath = req.file.path
+            const img = await jimp.read(imagePath);
+            const baseImage = await img.getBase64Async(jimp.AUTO)
+            const admin = new Admin({ email: email, passWord: password, name: name, role: role, image: baseImage });
+            await admin.save();
+            res.redirect('/admin/loginAdmin');
+         } else {
+            // thực hiện đoạn code khi không có path
+            const admin = new Admin({ email: email, passWord: password, name: name, role: role, image: "" });
+            await admin.save();
+            res.redirect('/admin/loginAdmin');
+         }
+
       }
 
    } catch (error) {
-      res.status(500).send(error);
+      console.log(error);
    }
 });
 
@@ -83,10 +89,11 @@ app.post('/login', async (req, res) => {
    try {
       const email = req.body.email;
       const pass = req.body.passWord;
+   
       let user = await Admin.findOne({ email: email })
       if (!user) {
          const err = "Email không tồn tại !"
-         res.status(400).send(err)
+         // res.status(400).send(err)
          res.render("login", {
             error: err
          })
@@ -94,7 +101,8 @@ app.post('/login', async (req, res) => {
          user.comparePassword(req.body.passWord, function (err, isMatch) {
             if (!err && isMatch) {
                // if user is found and password is right create a token
-               const token = jwt.sign({ user }, "nodeauthsecret", { expiresIn: '15m' });
+               let token = jwt.sign({"email":email},"secret" ,{expiresIn: '1h'});
+               // console.log("generated token", token);
                res.cookie('token', token, { httpOnly: true });
                req.session.user = {
                   email: user.email,
@@ -121,17 +129,22 @@ app.post('/login', async (req, res) => {
    }
 })
 
+// API login user 
+
+
 function verifyToken(req, res, next) {
    const token = req.cookies.token;
+   // console.log(token)
    if (!token) {
       return res.redirect('/admin/loginAdmin');
    }
 
-   jwt.verify(token, "nodeauthsecret", function (err, decoded) {
+   jwt.verify(token, "secret", function (err, decoded) {
       if (err) {
+        
          return res.redirect('/admin/loginAdmin');
       }
-      req.user = decoded.user;
+      // console.log("Verified "+decoded);
       next();
    });
 }
@@ -151,13 +164,23 @@ app.get("/home", verifyToken, (req, res) => {
 
 
 /// users 
+app.get("/getAllUsers", verifyToken, async (req, res) => {
+   try {
+      const users = await Admin.find({});
+      // res.json(users);
+      res.render("managerUser", {
+         users: users.map(user => user.toJSON()),
+      })
+   } catch (error) {
+      console.log(error)
+   }
+})
+
+//API getAllUser mobile 
 app.get("/getUsers", verifyToken, async (req, res) => {
    try {
       const users = await Admin.find({});
       res.json(users);
-    //   res.render("managerUser", {
-    //      users: users.map(user => user.toJSON()),
-    //   })
    } catch (error) {
       console.log(error)
    }
@@ -190,23 +213,45 @@ app.get("/edit/:id", verifyToken, async (req, res) => {
 
 })
 
-app.put("/inserUsers/:id", verifyToken, (req, res) => {
-   Admin.updateOne({ _id: req.params.id }, req.body)
+app.put("/inserUsers/:id", verifyToken, upload.single("image"), async (req, res) => {
+   const { name, email } = req.body;
+   // const imagePath = req.file.path;
+   // const image = await jimp.read(imagePath);
+   // const base64Image = await image.getBase64Async(jimp.AUTO);
+
+   Admin.updateOne({ _id: req.params.id }, { name, email, image: ""  })
       .then(() => res.redirect("/admin/getAllUsers"))
       .catch(err => console.error(err))
-})
+})  
 
 app.get("/addUsers", verifyToken, (req, res) => {
    res.render("addUser", {
       titleView: "Inserter User",
    })
 })
-app.post("/inserUsers", verifyToken, async (req, res) => {
+app.post("/inserUsers", verifyToken, upload.single("image"), async (req, res) => {
    try {
-      const user = new Admin(req.body);
-      await user.save();
-      res.redirect("/admin/getAllUsers")
-   } catch (error) {
+      const email = req.body.email;
+      const password = req.body.passWord;
+      const name = req.body.name;
+      const role = req.body.role;
+      if (req.file && req.file.path) {
+         // thực hiện đoạn code khi có path
+         const imagePath = req.file.path
+         const img = await jimp.read(imagePath);
+         const baseImage = await img.getBase64Async(jimp.AUTO)
+         const admin = new Admin({ email: email, passWord: password, name: name, role: role, image: baseImage });
+         await admin.save();
+         res.redirect('/admin/getAllUsers');
+      } else {
+         // thực hiện đoạn code khi không có path
+         const admin = new Admin({ email: email, passWord: password, name: name, role: role, image: "" });
+         await admin.save();
+         res.redirect('/admin/getAllUsers');
+      }
+
+   }
+   catch (error) {
       res.status(500).send(error);
    }
 })
@@ -243,11 +288,35 @@ app.get("/addProduct", verifyToken, (req, res) => {
    })
 })
 
-app.post("/inserProduct", verifyToken, async (req, res) => {
+app.post("/inserProduct", verifyToken, upload.single("image"), async (req, res) => {
    try {
-      const products = new product(req.body)
-      await products.save()
-      res.redirect("/admin/getAllProducts")
+      const code_product = req.body.code_product;
+      const name_product = req.body.name_product;
+      const price = req.body.price;
+      const color = req.body.color;
+      const id_KH = req.body.id_KH;
+      const name_KH = req.body.name_KH;
+      const type_product = req.body.type_product;
+      if (req.file && req.file.path) {
+         // thực hiện đoạn code khi có path
+         const imagePath = req.file.path
+         const img = await jimp.read(imagePath);
+         const baseImage = await img.getBase64Async(jimp.AUTO)
+         const sp = new product({
+            code_product, name_product, price, color, id_KH, name_KH, type_product,
+            image: baseImage
+         });
+         await sp.save();
+         res.redirect('/admin/getAllProducts');
+      } else {
+         // thực hiện đoạn code khi không có path
+         const sp = new product({
+            code_product, name_product, price, color, id_KH, name_KH, type_product,
+            image: ""
+         });
+         await sp.save();
+         res.redirect('/admin/getAllProducts');
+      }
    } catch (error) {
       res.status(500).render(error)
    }
@@ -284,10 +353,18 @@ app.get("/editProduct/:id", verifyToken, async (req, res) => {
    }
 })
 
-app.put("/updateProduct/:id", verifyToken, (req, res) => {
-   product.updateOne({ _id: req.params.id }, req.body)
-      .then(() => res.status(200).redirect("/admin/getAllProducts"))
-      .catch(error => res.status(500).render(error))
+app.put("/updateProduct/:id", verifyToken, upload.single("image"), async (req, res) => {
+   const { code_product, name_product, price, color, id_KH, name_KH, type_product } = req.body;
+   const imagePath = req.file.path;
+   const image = await jimp.read(imagePath);
+   const base64Image = await image.getBase64Async(jimp.AUTO);
+
+   product.updateOne({ _id: req.params.id }, {
+      code_product, name_product, price, color,
+      id_KH, name_KH, type_product, image: base64Image
+   })
+      .then(() => res.redirect("/admin/getAllProducts"))
+      .catch(err => console.error(err))
 })
 
 

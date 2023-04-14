@@ -8,7 +8,7 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const cors = require('cors');
 const http = require('http');
-
+const API = require("./API/pushAPI")
 const app = express();
 app.use(cors());
 app.use(flash());
@@ -51,7 +51,7 @@ app.set('views', './views');
 
 app.use("/admin", controllers)
 app.use(express.static('uploads'))
-
+app.use("/api",API)
 app.listen(port, function () {
     console.log("running port " + port)
 })
