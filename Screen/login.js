@@ -6,8 +6,8 @@ import { API_Clothes } from "../API/getAPI"
 
 export default function Login(props) {
     const nav = props.navigation
-    const [email , setEmail] = useState('')
-    const [passWord , setPassword] = useState('')
+    const [email , setEmail] = useState('hung@gmail.com')
+    const [passWord , setPassword] = useState('123')
     // const [errorEmails , setErrorEmails] = useState('')
     const [error , setError] = useState('')
     const formData = new FormData();
@@ -31,7 +31,7 @@ export default function Login(props) {
           if(!response.ok){
             setError("Tài khoản không chính xác !")
           }else{
-            nav.navigate("Home")
+            props.setIsLoggedIn(true); // gọi hàm setIsLoggedIn từ props để cập nhật trạng thái đăng nhập ở component App
           }
         })
         .catch(err => {
@@ -54,6 +54,7 @@ export default function Login(props) {
                 <View style={{ marginTop: 20 }}>
                     <Text>Email:</Text>
                     <TextInput
+                    value={email}
                         onChangeText={(text) => {
                             setEmail(text);
                         }}
@@ -67,6 +68,7 @@ export default function Login(props) {
                 <View style={{ marginTop: 10 }}>
                     <Text>Password:</Text>
                     <TextInput
+                    value={passWord}
                         onChangeText={(text) => {
                             setPassword(text);
                         }}

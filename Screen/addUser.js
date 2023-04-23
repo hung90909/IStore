@@ -4,31 +4,37 @@ import { StyleSheet, Text, View } from 'react-native';
 import React,{useState } from 'react';
 import {API_Clothes} from "../API/getAPI"
 import { useRoute } from '@react-navigation/native';
-export default function EditUser(props) {
+
+export default function addUser(props) {
     const nav = props.navigation
-    const route = useRoute()
-    const {item} = route.params
-    const [email , setEmail] = useState(item.email)
-    const [passWord , setPassword] = useState(item.passWord)
-    const [name , setName] = useState(item.name)
-    const [image , setImage] = useState(item.image)
+    // const route = useRoute()
+    // const {item} = route.params
+    const [email , setEmail] = useState()
+    const [passWord , setPassword] = useState()
+    const [name , setName] = useState()
+    const [image , setImage] = useState()
     const [errorEmails , setErrorEmails] = useState('')
     const formData = new FormData();
     formData.append("name", name);
     formData.append("email", email);
-    // formData.append("passWord", passWord);
+    formData.append("passWord", passWord);
     
-    const onEditUser = (id) =>{
-     fetch(API_Clothes+"/inserUsers"+"/"+id,{
-        method: 'PUT',
+    const onAddUser = () =>{
+     fetch(API_Clothes+"/inserUsers",{
+        method: 'POST',
         body : formData,
         Headers:{
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           } 
      })
-      .then(() =>{
-            nav.navigate("Home")
+      .then(repost =>{
+         if(!repost.ok){
+            setErrorEmails("Email đã tồn tại !")
+         }else{
+             nav.navigate("Home")
+         }
+           
       })
      .catch(err => 
         console.error(err))
@@ -42,7 +48,7 @@ export default function EditUser(props) {
             }}>
                 <Text style={{
                     textAlign: "center", fontWeight: "bold", fontSize: 30, marginTop: 20,
-                }}>Cập nhật</Text>
+                }}>Thêm tài khoản</Text>
                 <View style={{ marginTop: 20 }}>
                     <Text>Email:</Text>
                     <TextInput
@@ -56,6 +62,20 @@ export default function EditUser(props) {
                         }}
                         placeholder='Email' />
                        {errorEmails && <Text style={{color:"red"}}>{errorEmails}</Text>}
+                </View>
+                <View style={{ marginTop: 10 }}>
+                    <Text>Password:</Text>
+                    <TextInput
+                    value={passWord}
+                    onChangeText={(text)=>{
+                        setPassword(text);
+                    }}
+                        style={{
+                            width: "100%", height: 40, borderWidth: 0.5, marginTop: 5,
+                            borderRadius: 6, paddingLeft: 10
+                        }}
+                        placeholder='Password' />
+                      
                 </View>
                 <View style={{ marginTop: 10 }}>
                     <Text>Name:</Text>
@@ -73,7 +93,7 @@ export default function EditUser(props) {
                 {image && <Image source={{uri:image}} 
                 style={{width:40 , height:40 ,borderRadius:20 , marginTop:10 , borderWidth:2, 
                 borderColor:"gray" }}/>}
-                <View style={{marginTop:5 , flexDirection:"row", 
+                <View style={{marginTop:5 , flexDirection:"row", marginTop:15,
             alignItems:"center"}}>
                     <Image style={{
                         width:30 , height:30
@@ -83,7 +103,7 @@ export default function EditUser(props) {
                 <View style={{ marginTop: 20 , flexDirection:"row" }}>
                     <TouchableOpacity 
                     onPress={()=>{
-                        onEditUser(item._id)
+                        onAddUser()
                     }}
                     style={{
                          backgroundColor: "#337ab7",

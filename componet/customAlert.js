@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     backgroundColor: '#F2F2F2',
-    marginRight:10
+    marginRight: 10
   },
   okButton: {
     backgroundColor: '#007AFF'
