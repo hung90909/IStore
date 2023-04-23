@@ -9,6 +9,8 @@ const flash = require('connect-flash');
 const cors = require('cors');
 const http = require('http');
 const API = require("./API/pushAPI")
+const typeProduct = require("./API/controlerTypeProduct")
+const product = require("./API/controlerProduct")
 const app = express();
 app.use(cors());
 app.use(flash());
@@ -50,6 +52,8 @@ app.set('view engine', '.hbs');
 app.set('views', './views');
 
 app.use("/admin", controllers)
+app.use("/typesProducts",typeProduct )
+app.use("/product", product)
 app.use(express.static('uploads'))
 app.use("/api",API)
 app.listen(port, function () {

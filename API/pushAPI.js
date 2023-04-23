@@ -87,13 +87,15 @@ app.get('/', (req, res) => {
 })
 app.post('/login', async (req, res) => {
    try {
+      console.log(req.body)
       const email = req.body.email;
       const pass = req.body.passWord;
    
       let user = await Admin.findOne({ email: email })
+      console.log(user)
       if (!user) {
          const err = "Email không tồn tại !"
-         // res.status(400).send(err)
+         res.status(400).send(err)
          res.render("login", {
             error: err
          })
@@ -235,6 +237,12 @@ app.post("/inserUsers", verifyToken, upload.single("image"), async (req, res) =>
       const password = req.body.passWord;
       const name = req.body.name;
       const role = req.body.role;
+      const checkEmail =  await Admin.findOne({email: email})
+      if(checkEmail){
+         const err = "Email đã tồn tại !"
+         res.status(400).send(err)
+         return
+      }
       if (req.file && req.file.path) {
          // thực hiện đoạn code khi có path
          const imagePath = req.file.path
@@ -373,9 +381,10 @@ app.put("/updateProduct/:id", verifyToken, upload.single("image"), async (req, r
 app.get("/search", verifyToken, async (req, res) => {
    try {
       const name = req.query.search;
-      const users = await Admin.find({ name: { $regex: name, $options: "i" } });
-
-      res.render("managerUser", { users: users.map(user => user.toJSON()) });
+      console.log(name)
+      const regex = new RegExp(name, "i");
+      const users = await Admin.find({ name: regex });
+      res.json(users);
    } catch (error) {
       res.status(500).send(error.message);
    }

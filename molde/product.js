@@ -6,10 +6,10 @@ const product = new Schema({
     name_product : String,
     price : Number,
     image : String,
-    color : String,
-    id_KH : String,
-    name_KH : String,
-    type_product : String,
+    description : String,
+    review : Number,
+    sold: Number,
+    typeProductID:String,
   });
 
 module.exports = mongoose.model("product",product);
