@@ -6,6 +6,7 @@ const Admin = new Schema({
     passWord: String,
     name: String,
     image:String,
+    date : String,
     role: { type: String, enum: ['admin', 'user'], default: 'user' }
   });
 

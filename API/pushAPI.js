@@ -44,6 +44,7 @@ app.post('/dangkyAdmin', upload.single("image"), async (req, res) => {
       const email = req.body.email;
       const password = req.body.passWord;
       const name = req.body.name;
+      const date = req.body.date;
       const role = req.body.role;
       const checkEmail = await Admin.findOne({ email: email })
       console.log(checkEmail)
@@ -54,22 +55,12 @@ app.post('/dangkyAdmin', upload.single("image"), async (req, res) => {
             error: err
          })
       } else {
-         if (req.file && req.file.path) {
-            // thực hiện đoạn code khi có path 
-            const imagePath = req.file.path
-            const img = await jimp.read(imagePath);
-            const baseImage = await img.getBase64Async(jimp.AUTO)
-            const admin = new Admin({ email: email, passWord: password, name: name, role: role, image: baseImage });
-            await admin.save();
-            res.redirect('/admin/loginAdmin');
-         } else {
-            // thực hiện đoạn code khi không có path
-            const admin = new Admin({ email: email, passWord: password, name: name, role: role, image: "" });
-            await admin.save();
-            res.redirect('/admin/loginAdmin');
-         }
-
+            const user = new Admin(req.body)
+            await user.save()
+            res.json(user)
       }
+
+
 
    } catch (error) {
       console.log(error);
@@ -87,108 +78,55 @@ app.get('/', (req, res) => {
 })
 app.post('/login', async (req, res) => {
    try {
-      console.log(req.body)
+       console.log(req.body)
       const email = req.body.email;
       const pass = req.body.passWord;
-   
-      let user = await Admin.findOne({ email: email })
-      console.log(user)
-      if (!user) {
-         const err = "Email không tồn tại !"
-         res.status(400).send(err)
-         res.render("login", {
-            error: err
-         })
-      } else {
-         user.comparePassword(req.body.passWord, function (err, isMatch) {
-            if (!err && isMatch) {
-               // if user is found and password is right create a token
-               let token = jwt.sign({"email":email},"secret" ,{expiresIn: '1h'});
-               // console.log("generated token", token);
-               res.cookie('token', token, { httpOnly: true });
-               req.session.user = {
-                  email: user.email,
-                  passWord: user.passWord,
-                  role: user.role,
-                  image: user.image,
-                  _id: user._id,
-                  name: user.name,
-                  pass: pass
-               }
-               res.redirect('/admin/home');
+      const user = await Admin.findOne({ email: email })
+  
+      if (user) {
+         user.comparePassword(pass, function (err, isMatch) {
+            if (isMatch && !err) {
+               // const token = jwt.sign({_id : user._id},'secretkey')
+               res.json(user);
 
             } else {
-               const err = "Mật khẩu không chính xác !"
-               res.status(err).send(err);
-               res.render("login", {
-                  error: err
-               });
+               console.log("sai pass word")
+               const err = "Tai khoan không tồn tại !"
+               res.status(400).send(err)
+               return
             }
-         });
+         })
+         return
       }
+      console.log("email khong ton tai")
+      const err = "Tai khoan không tồn tại !"
+      res.status(400).send(err)
    } catch (err) {
-      res.status(500).send(err.message)
+      res.status(500).send(err)
    }
 })
 
 // API login user 
 
 
-function verifyToken(req, res, next) {
-   const token = req.cookies.token;
-   // console.log(token)
-   if (!token) {
-      return res.redirect('/admin/loginAdmin');
-   }
-
-   jwt.verify(token, "secret", function (err, decoded) {
-      if (err) {
-        
-         return res.redirect('/admin/loginAdmin');
-      }
-      // console.log("Verified "+decoded);
-      next();
-   });
-}
-
-app.get("/home", verifyToken, (req, res) => {
-   const user = req.session.user
-   if (!user) {
-      res.redirect("/admin/loginAdmin")
-   } else {
-      if (req.session.user.role === "admin") {
-         res.redirect("/admin/getAllUsers")
-      } else {
-         res.redirect("/admin/getInformation")
-      }
-   }
-})
-
-
-/// users 
-app.get("/getAllUsers", verifyToken, async (req, res) => {
-   try {
-      const users = await Admin.find({});
-      // res.json(users);
-      res.render("managerUser", {
-         users: users.map(user => user.toJSON()),
-      })
-   } catch (error) {
-      console.log(error)
-   }
-})
+// function verifyToken(req, res, next) {
+//    const token = req.header('Authorization').replace('Bearer ', '')
+//    const decoded = jwt.verify(token, 'secretkey');
+//    req.user = decoded;
+//     next();
+// }
 
 //API getAllUser mobile 
-app.get("/getUsers", verifyToken, async (req, res) => {
+app.get("/getUsers", async (req, res) => {
    try {
-      const users = await Admin.find({});
+      const users = await Admin.find();
       res.json(users);
    } catch (error) {
       console.log(error)
    }
 })
 
-app.get("/delete/:id", verifyToken, async (req, res) => {
+app.get("/delete/:id", async (req, res) => {
    try {
       const u = await Admin.findByIdAndDelete(req.params.id, req.body)
       if (!u) {
@@ -201,7 +139,7 @@ app.get("/delete/:id", verifyToken, async (req, res) => {
    }
 })
 
-app.get("/edit/:id", verifyToken, async (req, res) => {
+app.get("/edit/:id", async (req, res) => {
    try {
       await Admin.findById(req.params.id)
          .then(user => {
@@ -215,55 +153,38 @@ app.get("/edit/:id", verifyToken, async (req, res) => {
 
 })
 
-app.put("/inserUsers/:id", verifyToken, upload.single("image"), async (req, res) => {
-   const { name, email } = req.body;
-   // const imagePath = req.file.path;
-   // const image = await jimp.read(imagePath);
-   // const base64Image = await image.getBase64Async(jimp.AUTO);
-
-   Admin.updateOne({ _id: req.params.id }, { name, email, image: ""  })
+app.put("/inserUsers/:id", upload.single("image"), async (req, res) => {
+   Admin.updateOne({ _id: req.params.id }, req.body)
       .then(() => res.redirect("/admin/getAllUsers"))
       .catch(err => console.error(err))
-})  
+})
 
-app.get("/addUsers", verifyToken, (req, res) => {
+app.get("/addUsers", (req, res) => {
    res.render("addUser", {
       titleView: "Inserter User",
    })
 })
-app.post("/inserUsers", verifyToken, upload.single("image"), async (req, res) => {
+app.post("/inserUsers", upload.single("image"), async (req, res) => {
    try {
-      const email = req.body.email;
-      const password = req.body.passWord;
-      const name = req.body.name;
-      const role = req.body.role;
-      const checkEmail =  await Admin.findOne({email: email})
-      if(checkEmail){
+      const email = req.body.email; 
+      const checkEmail = await Admin.findOne({ email: email })
+      if (checkEmail) {
          const err = "Email đã tồn tại !"
          res.status(400).send(err)
          return
+      }else{
+         const user = new Admin(req.body)
+         await user.save()
+         res.json(user)
       }
-      if (req.file && req.file.path) {
-         // thực hiện đoạn code khi có path
-         const imagePath = req.file.path
-         const img = await jimp.read(imagePath);
-         const baseImage = await img.getBase64Async(jimp.AUTO)
-         const admin = new Admin({ email: email, passWord: password, name: name, role: role, image: baseImage });
-         await admin.save();
-         res.redirect('/admin/getAllUsers');
-      } else {
-         // thực hiện đoạn code khi không có path
-         const admin = new Admin({ email: email, passWord: password, name: name, role: role, image: "" });
-         await admin.save();
-         res.redirect('/admin/getAllUsers');
-      }
+     
 
    }
    catch (error) {
       res.status(500).send(error);
    }
 })
-app.get("/user", verifyToken, async (req, res) => {
+app.get("/user", async (req, res) => {
    try {
       const user = Admin.find({})
       user.find({}).then(users => {
@@ -276,13 +197,13 @@ app.get("/user", verifyToken, async (req, res) => {
    }
 })
 
-app.get("/product", verifyToken, (req, res) => {
+app.get("/product", (req, res) => {
    res.redirect("/admin/getAllProducts")
 })
 
 //Product
 
-app.get("/getAllProducts", verifyToken, (req, res) => {
+app.get("/getAllProducts", (req, res) => {
    product.find({}).then(product => {
       res.render("managerProduct", {
          product: product.map(products => products.toJSON())
@@ -290,13 +211,13 @@ app.get("/getAllProducts", verifyToken, (req, res) => {
    })
 })
 
-app.get("/addProduct", verifyToken, (req, res) => {
+app.get("/addProduct", (req, res) => {
    res.render("addProduct", {
       titleView: "Inserter Products",
    })
 })
 
-app.post("/inserProduct", verifyToken, upload.single("image"), async (req, res) => {
+app.post("/inserProduct", upload.single("image"), async (req, res) => {
    try {
       const code_product = req.body.code_product;
       const name_product = req.body.name_product;
@@ -331,7 +252,7 @@ app.post("/inserProduct", verifyToken, upload.single("image"), async (req, res) 
 
 })
 
-app.get("/deleteProduct/:id", verifyToken, async (req, res) => {
+app.get("/deleteProduct/:id", async (req, res) => {
    try {
       const ps = await product.findByIdAndDelete(req.params.id, req.body)
       if (!ps) {
@@ -345,7 +266,7 @@ app.get("/deleteProduct/:id", verifyToken, async (req, res) => {
 
 })
 
-app.get("/editProduct/:id", verifyToken, async (req, res) => {
+app.get("/editProduct/:id", async (req, res) => {
 
    try {
       await product.findById(req.params.id)
@@ -361,7 +282,7 @@ app.get("/editProduct/:id", verifyToken, async (req, res) => {
    }
 })
 
-app.put("/updateProduct/:id", verifyToken, upload.single("image"), async (req, res) => {
+app.put("/updateProduct/:id", upload.single("image"), async (req, res) => {
    const { code_product, name_product, price, color, id_KH, name_KH, type_product } = req.body;
    const imagePath = req.file.path;
    const image = await jimp.read(imagePath);
@@ -378,7 +299,7 @@ app.put("/updateProduct/:id", verifyToken, upload.single("image"), async (req, r
 
 // search users 
 
-app.get("/search", verifyToken, async (req, res) => {
+app.get("/search", async (req, res) => {
    try {
       const name = req.query.search;
       console.log(name)
@@ -393,7 +314,7 @@ app.get("/search", verifyToken, async (req, res) => {
 
 // get Information user
 
-app.get("/getInformation", verifyToken, async (req, res) => {
+app.get("/getInformation", async (req, res) => {
    try {
       const user = req.session.user;
       if (user) {
@@ -409,8 +330,9 @@ app.get("/getInformation", verifyToken, async (req, res) => {
 
 })
 
-app.get("/editInformation/:id", verifyToken, async (req, res) => {
+app.get("/editInformation/:id", async (req, res) => {
    try {
+      console.log(req.body);
       const u = await Admin.findById(req.params.id)
       res.render("editInformation", {
          titleView: "Update Information",
@@ -422,7 +344,7 @@ app.get("/editInformation/:id", verifyToken, async (req, res) => {
 
 })
 
-app.put("/updateInfor/:id", verifyToken, async (req, res) => {
+app.put("/updateInfor/:id", async (req, res) => {
    Admin.updateOne({ _id: req.params.id }, req.body)
       .then(() => {
          res.redirect("/admin/getAllInfor")
@@ -430,7 +352,7 @@ app.put("/updateInfor/:id", verifyToken, async (req, res) => {
       .catch(err => console.log(err))
 })
 
-app.get("/getAllInfor", verifyToken, async (req, res) => {
+app.get("/getAllInfor", async (req, res) => {
    try {
       const user = req.session.user;
       await Admin.findById({ _id: user._id })

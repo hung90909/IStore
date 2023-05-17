@@ -11,6 +11,8 @@ const http = require('http');
 const API = require("./API/pushAPI")
 const typeProduct = require("./API/controlerTypeProduct")
 const product = require("./API/controlerProduct")
+const buyer = require("./API/controlerBuyer")
+const address = require("./API/controlerAdderss")
 const app = express();
 app.use(cors());
 app.use(flash());
@@ -54,6 +56,8 @@ app.set('views', './views');
 app.use("/admin", controllers)
 app.use("/typesProducts",typeProduct )
 app.use("/product", product)
+app.use("/buyer", buyer)
+app.use("/address", address)
 app.use(express.static('uploads'))
 app.use("/api",API)
 app.listen(port, function () {

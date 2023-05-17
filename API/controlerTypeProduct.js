@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const express = require('express')
+const Product = require("../molde/product")
 const session = require('express-session');
 const multer = require("multer");
 const typeProduct = require("../molde/TypeProduct");
@@ -17,6 +18,18 @@ app.get('/getAllTypeProduct', async (req, res) => {
         then(item => res.json(item))
         .catch(err => console.error(err))
 })
+
+app.post("/getAllProduct", async (req , res) =>{
+    try {
+        const id = req.body.id;
+        const getAll = await Product.find({typeProductID:id})
+        res.json(getAll);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Server Error");
+    }
+})
+
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
