@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState, useRef } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, SafeAreaView, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput,
+   TouchableOpacity, SafeAreaView, FlatList ,ToastAndroid} from 'react-native';
 import { API_Buyer, API_TypeProduct, API_Product, API_Address, API_DetailOrder } from '../../API/getAPI';
 import icon from '../../compoment/icon';
 import { useRoute } from '@react-navigation/native';
@@ -10,10 +11,8 @@ import { useIsFocused } from '@react-navigation/native';
 export default function Pay(props) {
   const nav = props.navigation
   const [address, setAddress] = useState([])
-
-
   const route = useRoute()
-  const { item } = route.params
+  const { item, selectedItems  } = route.params
 
   const status = useIsFocused()
   const [result, setResult] = useState("")
@@ -23,8 +22,6 @@ export default function Pay(props) {
   const [giaSP, setGiaSP] = useState(item.price)
   const [nameSP, setNameSP] = useState(item.name_product)
   const [image, setImage] = useState(item.image)
-  // const [sold, setSold] = useState(item.sold + 1)
-
 
   const formData = new FormData();
   formData.append("ID_KH", ID_KH);
@@ -34,10 +31,13 @@ export default function Pay(props) {
   formData.append("soluongSP", count);
   formData.append("ID_Address", checked);
   formData.append("tongTien", result);
-  formData.append("status", "xu ly");
-  // formData.append("sold", sold);
+  formData.append("status", "xu ly"); 
 
   const onSaveOrder = () => {
+    if(!checked){
+      ToastAndroid.show("Vui lòng thêm địa chỉ !",ToastAndroid.CENTER ,ToastAndroid.LONG)
+      return
+    }
     fetch(API_DetailOrder + "/addOrder", {
       method: "POST",
       body: formData,
@@ -86,10 +86,10 @@ export default function Pay(props) {
       <View style={{ padding: 10, backgroundColor: "#FFFAFA", flexDirection: "row" }}>
         <Image style={{
           width: 100, height: 100
-        }} source={{ uri: item.image }} />
+        }} source={{ uri: image }} />
         <View style={{ marginStart: 10 }}>
-          <Text style={{ fontSize: 30 }}>{item.name_product}</Text>
-          <Text style={{ fontSize: 20, marginTop: 25 }}>{item.price}$</Text>
+          <Text style={{ fontSize: 30 }}>{nameSP}</Text>
+          <Text style={{ fontSize: 20, marginTop: 25 }}>{giaSP}$</Text>
         </View>
         <View style={{ flexDirection: "row", position: "absolute", right: 25, bottom: 18 }}>
           <TouchableOpacity

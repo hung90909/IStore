@@ -10,8 +10,16 @@ export default function dangGiao() {
     const nav = useNavigation()
     const [list, setList] = useState([])
     const trangThai = useIsFocused()
-    const getAllXacNhan = () => {
-        fetch(API_DetailOrder + "/getAllOrderXacNhan")
+    const getAllXacNhan = async () => {
+        const user = await AsyncStorage.getItem('data');
+        const data = user ? JSON.parse(user) : null;
+        fetch(API_DetailOrder + "/getAllOrderXacNhan",{
+            method:"POST",
+            body:JSON.stringify({id:data._id}),
+            headers:{
+                "Content-Type": "application/json"
+            }
+        })
             .then(item => item.json())
             .then(data => setList(data))
             .catch(err => console.log(err))

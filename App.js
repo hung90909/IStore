@@ -22,13 +22,15 @@ import DaHuy from './screen/Order.js/daHuy';
 import Success from './screen/Product/success';
 import DetailProduct from './screen/Product/detailProduct';
 import Cart from './screen/CartProduct/cart';
+import ListSearch from './screen/Product/listSearch';
+import ChangePassword from './screen/changePassword';
 
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [orderCount, setOrderCount] = useState(0);
-  const [isLogin, setIsLogin] = useState(false)
+  const [isLogin, setIsLogin] = useState(true)
 
   function LoginTab() {
     return (
@@ -43,9 +45,10 @@ export default function App() {
   }
   function HomeTab() {
     return (
-      <Stack.Navigator>
+      <Stack.Navigator >
         <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} />
         <Stack.Screen name='TypeDetail' component={TypeDetail} options={{ headerShown: false }} />
+        <Stack.Screen name='ListSearch' component={ListSearch} options={{ headerShown: false }} />
         <Stack.Screen name='DetailProduct' component={DetailProduct} options={{ headerShown: false }} />
         <Stack.Screen name='Cart' component={Cart} options={{ title:"Giỏ hàng" }} />
         <Stack.Screen name='Pay' component={Pay} options={{ title: "Thanh toán" }} >
@@ -62,7 +65,10 @@ export default function App() {
   function InformationTab() {
     return (
       <Stack.Navigator>
-        <Stack.Screen name='Information' component={Information} options={{ headerShown: false }} />
+        <Stack.Screen name='Information'  options={{ headerShown: false }} >
+        {(props) => <Information {...props} setIsLogin={setIsLogin} />}
+        </Stack.Screen>
+        <Stack.Screen component={ChangePassword} name='ChangePassword' options={{ title:"Đôi mật khẩu"}}/>
       </Stack.Navigator>
     )
 
@@ -94,7 +100,8 @@ export default function App() {
   function MainTab() {
     return (
 
-      <Tab.Navigator screenOptions={({ route }) => ({
+      <Tab.Navigator initialRouteName='Home' 
+       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 

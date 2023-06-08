@@ -113,7 +113,7 @@ export default function Register(props) {
                     {errorEmail && <Text style={{ color: "red", marginStart: 50 }}>{errorEmail}</Text>}
                     <TextInput
                         onChangeText={(text) => {
-                            if (checkPassword(text)) {
+                            if (checkPassword(text)) { 
                                 setPassword(text)
                                 setErorPassword("")
                             } else {

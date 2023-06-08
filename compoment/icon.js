@@ -7,4 +7,13 @@ export default{
      order : require("../assets/order.png"),
      success : require("../assets/Success.png"),
      addCart : require("../assets/add_cart.png"),
+     notSearch : require("../assets/notSearch.png"),
+     profile: require("../assets/profile.png"),
+     next : require("../assets/next.png"),
+     email: require("../assets/email.png"),
+     eye : require("../assets/eye.png"),
+     phone: require("../assets/phone.png"),
+     logout : require("../assets/logout.png"),
+     name : require("../assets/name.png"),
+     camera : require("../assets/camera.png"),
 }

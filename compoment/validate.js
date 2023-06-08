@@ -22,7 +22,7 @@ export const checkEmail = (text)=>{
 
 export const checkPassword = (text) =>{
     if(text === ""){
-        return false
+        return false 
     }else{
         return true
     }

@@ -11,8 +11,16 @@ export default function huyDon() {
     const [list, setList] = useState([])
     const trangThai = useIsFocused()
     const nav = useNavigation()
-    const getAllXuLy = () => {
-        fetch(API_DetailOrder + "/getAllOrderHuyDon")
+    const getAllXuLy = async () => {
+        const user = await AsyncStorage.getItem('data');
+        const data = user ? JSON.parse(user) : null;
+        fetch(API_DetailOrder + "/getAllOrderHuyDon",{
+            method:"POST",
+            body:JSON.stringify({id:data._id}),
+            headers:{
+                "Content-Type": "application/json"
+            }
+        })
             .then(item => item.json())
             .then(data => setList(data))
             .catch(err => console.log(err))

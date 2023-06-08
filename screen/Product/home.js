@@ -34,20 +34,30 @@ export default function Home(props) {
             }}>
                 <SlideShow />
             </View>
-            <View style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                position: "absolute",
-                top: 20,
-                left: 20,
-                right: 20
-            }}>
-                <TextInput style={{
-                    width: "85%",
-                    height: 35,
-                    backgroundColor: "white",
-                    borderRadius: 20
-                }} />
+            <View
+                // onPress={()=>{
+                //     nav.navigate("ListSearch")
+                // }}
+                style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    position: "absolute",
+                    top: 20,
+                    left: 20,
+                    right: 20
+                }}>
+
+
+                <TouchableOpacity
+                    onPress={() => {
+                        nav.navigate("ListSearch")
+                    }}
+                    style={{
+                        width: "85%",
+                        height: 35,
+                        backgroundColor: "white",
+                        borderRadius: 20
+                    }} ></TouchableOpacity>
                 <Image style={{
                     width: 20,
                     height: 20,
@@ -56,31 +66,38 @@ export default function Home(props) {
                     left: 10,
                     tintColor: "gray"
                 }} source={icon.search} />
-                <Image style={{
+               <TouchableOpacity
+               onPress={()=>{
+                nav.navigate("Cart")
+               }}>
+                   <Image style={{
                     width: 30,
                     height: 30,
                     marginTop: 2,
                     tintColor: "gray"
                 }} source={icon.cart} />
+               </TouchableOpacity>
+             
             </View>
             <FlatList
-                style={{ backgroundColor: "#F5F5F5", marginTop: 20, 
-             }}
+                style={{
+                    backgroundColor: "#F5F5F5", marginTop: 20,
+                }}
                 data={data}
                 horizontal={true}
                 showsHorizontalScrollIndicator={true}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => {
                     return (
-                        <TouchableOpacity 
-                        onPress={()=>{
-                            nav.navigate("TypeDetail", {item})
-                        }}
-                        style={{
-                            marginRight: 10, width: 70, height: 70, marginVertical: 10,
-                            alignItems: "center", overflow: "hidden"
+                        <TouchableOpacity
+                            onPress={() => {
+                                nav.navigate("TypeDetail", { item })
+                            }}
+                            style={{
+                                marginRight: 10, width: 70, height: 70, marginVertical: 10,
+                                alignItems: "center", overflow: "hidden"
 
-                        }}>
+                            }}>
                             <Image style={{
                                 width: 50, height: 50, borderRadius: 25, borderWidth: 1, borderColor: "black"
                             }} source={{ uri: item.image }} />
@@ -94,15 +111,16 @@ export default function Home(props) {
                     )
                 }}
             />
+         
             <FlatList
-                style={{ backgroundColor: "#DCDCDC" ,height:310}}
+                style={{ backgroundColor: "#DCDCDC", maxHeight:480}}
                 data={listSP}
                 numColumns={2}
                 keyExtractor={item => item._id}
                 renderItem={({ item }) => {
                     return (
-                        <GripView item={item} onPress={()=>{
-                            nav.navigate("DetailProduct",{item})
+                        <GripView item={item} onPress={() => {
+                            nav.navigate("DetailProduct", { item })
                         }} />
                     )
                 }}

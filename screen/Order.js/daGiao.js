@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState, useRef } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, SafeAreaView, FlatList } from 'react-native';
-import { API_Clothes, API_DetailOrder } from '../../API/getAPI';
+import { API_Buyer, API_Clothes, API_DetailOrder } from '../../API/getAPI';
 import { useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
@@ -10,8 +10,17 @@ export default function DaGiao() {
     const nav = useNavigation()
     const [list, setList] = useState([])
     const trangThai = useIsFocused()
-    const getAllDaGiao = () => {
-        fetch(API_DetailOrder + "/getAllOrderDaNhan")
+    const getAllDaGiao = async() => {
+        const user = await AsyncStorage.getItem('data');
+        const data = user ? JSON.parse(user) : null;
+
+        fetch(API_DetailOrder + "/getAllOrderDaNhan",{
+            method:"POST",
+            body:JSON.stringify({id:data._id}),
+            headers:{
+                "Content-Type": "application/json"
+            }
+        })
             .then(item => item.json())
             .then(data => setList(data))
             .catch(err => console.log(err))

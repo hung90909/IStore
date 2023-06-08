@@ -12,6 +12,7 @@ export default function DetailProduct(props) {
     const route = useRoute()
     const nav = props.navigation
     const { item } = route.params;
+    // console.log(item)
     const [data, setData] = useState([])
     const getTopSP = () => {
         fetch(API_Product + "/getTopSP")
@@ -20,9 +21,17 @@ export default function DetailProduct(props) {
             .catch(err => console.log(err))
     }
 
+    const onUser = async () =>{
+       const user = await AsyncStorage.getItem("data");
+       const data = user ? JSON.parse(user) : null;
+       setIDKH(data._id)
+    }
+
     useEffect(() => {
         getTopSP();
-    }, [])
+        onSetData()
+        onUser()
+    }, [item])
     function formatNumber(num) {
         if (num >= 1000) {
             return (num / 1000).toFixed(1) + 'k';
@@ -30,14 +39,28 @@ export default function DetailProduct(props) {
             return num;
         }
     }
+    const onSetData = () =>{
+        setImage(item.image)
+        setName_product(item.name_product)
+        console.log(item.name_product)
+        setPrice(item.price)
+        setDescription(item.description)
+        setSold(item.sold)
+        setTypeProductID(item.typeProductID)
+        setReview(item.review)
+        setID(item._id)
+    }
     const formData = new FormData();
-    const [name_product, setName_product] = useState(item.name_product)
-    const [price, setPrice] = useState(item.price)
-    const [image, setImage] = useState(item.image)
-    const [description, setDescription] = useState(item.description)
-    const [sold, setSold] = useState(item.sold)
-    const [typeProductID, setTypeProductID] = useState(item.typeProductID)
-    const [review, setReview] = useState(item.review)
+    const [name_product, setName_product] = useState('')
+    const [ID_Product , setID] = useState('')
+    const [price, setPrice] = useState('')
+    const [image, setImage] = useState('')
+    const [description, setDescription] = useState('')
+    const [sold, setSold] = useState('')
+    const [typeProductID, setTypeProductID] = useState('')
+    const [review, setReview] = useState('')
+    const [soLuong  , setSoLuong] = useState(1)
+    const [ID_KH , setIDKH] = useState('')
     formData.append("name_product",name_product)
     formData.append("price",price)
     formData.append("image",image)
@@ -45,7 +68,11 @@ export default function DetailProduct(props) {
     formData.append("sold",sold)
     formData.append("typeProductID",typeProductID)
     formData.append("review",review)
+    formData.append("ID_Product",ID_Product)
+    formData.append("soLuong",soLuong)
+    formData.append("ID_KH",ID_KH)
     const onAddCart = () =>{
+        // console.log(formData)
         ToastAndroid.show('Thêm vào giỏ hàng thành công !',ToastAndroid.LONG, ToastAndroid.CENTER )
         fetch(API_Cart + '/addCart',{
             method:"POST",

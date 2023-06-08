@@ -54,14 +54,14 @@ export default function Login(props) {
                 <Image style={{
                     width: 170,
                     height: 170,
-                    marginBottom: 10
+                    marginBottom: 20
                 }} source={require('../assets/logo.png')} />
                 <Text style={{
                     fontSize: 30,
                     fontWeight: 'bold',
                     position: "absolute",
                     color: 'gray',
-                    top: 130
+                    top: 150
                 }}>Clothes Shop</Text>
             </View>
             <View style={{

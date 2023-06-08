@@ -11,8 +11,16 @@ export default function xuLy() {
     const nav = useNavigation()
     const [list, setList] = useState([])
     const trangThai = useIsFocused()
-    const getAllXuLy = () => {
-        fetch(API_DetailOrder + "/getAllOrderXuLy")
+    const getAllXuLy = async () => {
+        const user = await AsyncStorage.getItem('data');
+        const data = user ? JSON.parse(user) : null;
+        fetch(API_DetailOrder + "/getAllOrderXuLy",{
+            method:"POST",
+            body:JSON.stringify({id:data._id}),
+            headers:{
+                "Content-Type": "application/json"
+            }
+        })
             .then(item => item.json())
             .then(data => setList(data))
             .catch(err => console.log(err))
