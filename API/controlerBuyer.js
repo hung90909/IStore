@@ -8,7 +8,9 @@ const express = require('express')
 const session = require('express-session');
 const multer = require("multer");
 const buyer = require("../molde/Buyer")
-const address = require("../molde/adres")
+const address = require("../molde/adres");
+const cart = require("../molde/cart");
+const detailOrder = require("../molde/detailOrder")
 const app = express();
 app.use(bodyParser.json())
 app.use(express.json())
@@ -25,6 +27,16 @@ const upload = multer({
     limits: { fileSize: 2 * 1024 * 1024 } // giới hạn kích thước file tải lên là 2MB
 });
 
+app.put("/updateProfile/:id",upload.single("image"),async(req , res) =>{
+   try {
+    console.log(req.body.image)
+      await buyer.findByIdAndUpdate({_id:req.params.id},req.body)
+      res.send("update thanh cong")
+   } catch (error) {
+      console.log(error);
+   }
+})
+
 app.get("/getAllBuyer", async (req, res) => {
 
     await buyer.find()
@@ -35,6 +47,7 @@ app.get("/getAllBuyer", async (req, res) => {
 app.post("/getAddress", async (req, res) => {
     try {
         const id = req.body.id;
+        console.log(id)
         const adres = await address.find({ID_KH:id})
         if(adres){
             res.json(adres)
@@ -88,42 +101,40 @@ app.post("/Register", async (req, res) => {
     }
 
 })
-// app.get("/add" , async (req, res) => {
+
+app.put("/updatePassword/:id", async (req, res) => {
+    try {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(req.body.password, salt);
+      await buyer.findByIdAndUpdate(
+        { _id: req.params.id },
+        { password: hashedPassword }
+      );
+      
+      res.send("Cập nhật mật khẩu thành công");
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+//   app.post('/getAllCart',async(req , res) =>{
 //     try {
-//          await typeProduct.find()
-//         .then(item => res.json(item))
+//         console.log(req.body.id)
+//         const data = await cart.find({ID_KH:req.body.id});
+//         res.json(data)
 //     } catch (error) {
 //         console.log(error);
 //     }
-// })
+//   })
 
-// app.get("/getNameLSP", async (req, res) => {
-//    try {
-//       const idLSP = req.query.idLSP;
-//       const nameLSP = await TypeProduct.find({typeProductID: idLSP})
-//       res.json(nameLSP)
-//    } catch (error) {
-//     console.log(error);
-//    }
-// })
-
-// app.get("/deleteProduct/:id",async (req , res) =>{
+//   app.post("/getAllStatus", async (req, res) => {
 //     try {
-//         await product.findByIdAndDelete(req.params.id)
-//         .then(() => res.send("xoa thanh cong"))
+//         const data = await detailOrder.find({ID_KH: req.body.id})
+//         res.json(data)
 //     } catch (error) {
 //         console.log(error);
 //     }
-// })
-
-// app.put("/updateProduct/:id",upload.single("image"), async (req , res) =>{
-//      try {
-//         await product.findByIdAndUpdate({_id:req.params.id},req.body)
-//         .then(() =>{res.send("update thanh cong")})
-//      } catch (error) {
-//         console.log(error);
-//      }
-// })
+//   })
 
 
 module.exports = app;

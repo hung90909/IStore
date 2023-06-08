@@ -13,6 +13,8 @@ const typeProduct = require("./API/controlerTypeProduct")
 const product = require("./API/controlerProduct")
 const buyer = require("./API/controlerBuyer")
 const address = require("./API/controlerAdderss")
+const detailOrder = require("./API/controlerDetailOrder") 
+const cart = require("./API/controlerCart")
 const app = express();
 app.use(cors());
 app.use(flash());
@@ -52,14 +54,15 @@ app.engine('.hbs', handlebars.engine({
 }))
 app.set('view engine', '.hbs');
 app.set('views', './views');
-
 app.use("/admin", controllers)
 app.use("/typesProducts",typeProduct )
 app.use("/product", product)
 app.use("/buyer", buyer)
 app.use("/address", address)
+app.use("/detailOrder", detailOrder)
+app.use("/cart", cart)
 app.use(express.static('uploads'))
 app.use("/api",API)
 app.listen(port, function () {
     console.log("running port " + port)
-})
+}) 

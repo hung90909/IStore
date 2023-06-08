@@ -36,6 +36,7 @@ app.get("/getAllProducts",async (req , res) =>{
 app.post("/addProduct",upload.single("image") ,async (req , res) =>{
       try {
         console.log(req.body)
+        console.log(req.body.image)
         const sp = new product(req.body)
         await sp.save()
         res.send("them thanh cong ")
@@ -80,6 +81,31 @@ app.put("/updateProduct/:id",upload.single("image"), async (req , res) =>{
         console.log(error);
      }
 })
+
+app.get("/getTopSP", async (req , res) =>{
+    try {
+     const sp =  await product.find()
+     const listSP = sp.sort((a ,b)=>{
+         return b.sold - a.sold
+     })
+    const topSP =  listSP.slice(0, 7)
+     res.json(topSP)
+    
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+app.get("/searchProduct", async (req, res) => {
+    try {
+       const name = req.query.search;
+       const sp = await product.find({ name_product: { $regex: name, $options: "i" } });
+        res.json(sp);
+    //    res.render("managerUser", { users: users.map(user => user.toJSON()) });
+    } catch (error) {
+       res.status(500).send(error.message);
+    }
+ });
 
 
 module.exports = app;
