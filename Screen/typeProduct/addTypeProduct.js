@@ -30,8 +30,7 @@ export default function addTypeProduct(props) {
             method: 'POST',
             body: formData,
             Headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
+                "Content-Type": "multipart/form-data"
             }
             })
             .then(reponse =>{

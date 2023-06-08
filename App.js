@@ -19,6 +19,13 @@ import DetailProduct from './Screen/product/DatailProduct';
 import addProduct from './Screen/product/addProduct';
 import editProduct from './Screen/product/editProduct';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import UpdateUser from './Screen/UpdateUser';
+import Information from './Screen/information';
+import SplashScreen from './Screen/SplashScreen';
+import xacNhan from './Screen/order.js/xacNhan';
+import thanhCong from './Screen/order.js/thanhCong';
+import daHuy from './Screen/order.js/daHuy';
+import xuLy from './Screen/order.js/xuLy';
 
 const Tab = createBottomTabNavigator()
 
@@ -27,17 +34,21 @@ export default function App() {
 
   function handleLogin() {
     setIsLoggedIn(true);
+
   }
 
   function handleLogout() {
     setIsLoggedIn(false);
+    
   }
 
   function LoginNavigator() {
     return (
-      <Stack.Navigator initialRouteName='register'>
+      <Stack.Navigator initialRouteName='SplashScreen'>
         <Stack.Screen name='register' component={Register} options={{ headerShown: false }} />
-
+        <Stack.Screen name='SplashScreen' component={SplashScreen} options={{ headerShown: false }} >
+        {/* {(props) => <SplashScreen {...props} setIsLoggedIn={setIsLoggedIn} />} */}
+        </Stack.Screen>
         <Stack.Screen name='Login' options={{ headerShown: false }}>
           {(props) => <Login {...props} setIsLoggedIn={setIsLoggedIn} />}
         </Stack.Screen>
@@ -45,17 +56,21 @@ export default function App() {
     )
   }
 
-  const Stack = createNativeStackNavigator()
+
   function UserMain() {
     return (
       <Stack.Navigator initialRouteName='Home'>
-        <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} />
+        <Stack.Screen name='Home' options={{ headerShown: false }} >
+        {(props) => <Home {...props} setIsLoggedIn={setIsLoggedIn} />}
+        </Stack.Screen>
         <Stack.Screen name='addUser' component={addUser} options={{ headerShown: false }} />
         <Stack.Screen name='EditUser' component={EditUser} options={{ headerShown: false }} />
+        <Stack.Screen name='UpdateUser' component={UpdateUser} options={{ headerShown: false }} />
+        <Stack.Screen name='Thông tin cá nhân' component={Information} options={{ }} />
       </Stack.Navigator>
     )
   }
-
+  const Stack = createNativeStackNavigator()
   function ProductMain() {
     return (
       <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -73,6 +88,9 @@ export default function App() {
   function ProductNagator() {
     return (
       <TabTop.Navigator
+      screenOptions={({ route }) => ({
+        tabBarStyle: { display: route.name === 'Chi tiết' ? 'none' : 'flex' }
+      })}
         tabBarOptions={{
           tabStyle: {},
           labelStyle: { fontSize: 16, fontWeight: 'bold' },
@@ -82,12 +100,40 @@ export default function App() {
         }}>
         <TabTop.Screen name="Sản Phẩm" component={Product} />
         <TabTop.Screen name="Loại SP" component={typeProduct} />
-        <TabTop.Screen name="Chi tiết" component={ProductMain} options={{ tabBarVisible: false }} />
+        <TabTop.Screen
+          name="Chi tiết"
+          component={ProductMain}
+          screenOptions={() => ({
+            tabBarStyle: { display: 'none'}
+          })}
+        />
       </TabTop.Navigator>
     );
   }
 
+  function orderNagator() {
+    return (
+      <TabTop.Navigator
+      screenOptions={({ route }) => ({
 
+      })}
+        tabBarOptions={{
+          tabStyle: {},
+          labelStyle: { fontSize: 12, fontWeight: 'bold' },
+          indicatorStyle: { backgroundColor: 'tomato' },
+          activeTintColor: 'tomato',
+          inactiveTintColor: 'gray',
+        }}>
+        <TabTop.Screen name="xacNhan" component={xacNhan} options={{title:"Xác nhận"}}/>
+        <TabTop.Screen name="xuLy" component={xuLy} options={{title:"Đang giao"}}/>
+        <TabTop.Screen name="thanhCong" component={thanhCong} options={{title:"Thành công"}}/>
+        <TabTop.Screen name="daHuy" component={daHuy} options={{title:"Đã hủy"}}/>
+       
+      </TabTop.Navigator>
+    );
+  }
+  
+  
   function MainNavigator() {
     return (
       <Tab.Navigator
@@ -100,6 +146,8 @@ export default function App() {
               iconName = focused ? 'user' : 'user-o';
             } else if (route.name === 'Product') {
               iconName = focused ? 'shopping-cart' : 'shopping-basket';
+            } else if (route.name === 'Order'){
+              iconName = focused ? 'file-text-o' : 'file-text-o';
             }
 
             return <Icon name={iconName} size={size} color={color} />;
@@ -110,6 +158,7 @@ export default function App() {
       >
         <Tab.Screen name='User' component={UserMain} options={{ headerShown: false }} />
         <Tab.Screen name='Product' component={ProductNagator} options={{ headerShown: false }} />
+        <Tab.Screen name='Order' component={orderNagator} options={{ headerShown: false }} />
       </Tab.Navigator>
     )
   }

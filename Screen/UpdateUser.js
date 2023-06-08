@@ -1,12 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import { Image, TextInput, TouchableOpacity } from 'react-native';
+import {  Image, TextInput, TouchableOpacity ,DatePickerIOS } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
 import { API_Clothes } from "../API/getAPI"
 import { useRoute } from '@react-navigation/native';
-import * as ImagePicker from 'expo-image-picker';
-import { Picker } from '@react-native-picker/picker';
-export default function EditUser(props) {
+
+export default function UpdateUser(props) {
     const nav = props.navigation
     const route = useRoute()
     const { item } = route.params
@@ -15,14 +14,12 @@ export default function EditUser(props) {
     const [name, setName] = useState(item.name)
     const [image, setImage] = useState(item.image)
     const [date, setDate] = useState(item.date)
-    const [role, setRole] = useState(item.role)
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const [errorEmails, setErrorEmails] = useState('')
     const formData = new FormData();
     formData.append("name", name);
     formData.append("email", email);
-    formData.append("image", image);
-    formData.append('date', date);
-    formData.append("role", role);
+    // formData.append("passWord", passWord);
 
     const onEditUser = (id) => {
         fetch(API_Clothes + "/inserUsers" + "/" + id, {
@@ -35,23 +32,10 @@ export default function EditUser(props) {
         })
             .then(() => {
                 nav.navigate("Home")
-            })
+            })  
             .catch(err =>
                 console.error(err))
     }
-
-    const pickImage = async () => {
-        // No permissions request is necessary for launching the image library
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-        if (!result.canceled) {
-            setImage(result.assets[0].uri);
-        }
-    };
     return (
         <View style={{
             backgroundColor: " rgb(186, 186, 186)", flex: 1, paddingHorizontal: 30,
@@ -91,31 +75,18 @@ export default function EditUser(props) {
                         }}
                         placeholder='Name' />
                 </View>
-                <View style={{ marginTop: 10, flexDirection: "row" }}>
-                    <View>
-                        <Text>Ngày sinh:</Text>
-                        <TextInput
-                            value={date}
-                            onChangeText={(text) => {
-                                setDate(text)
-                            }}
-                            style={{
-                                width: "100%", height: 40, borderWidth: 0.5, marginTop: 5,
-                                borderRadius: 6, paddingLeft: 10
-                            }}
-                            placeholder='Ngày sinh' />
-                    </View>
-
-
-                    <Picker
-                        style={{ width: "70%" }}
-                        selectedValue={role}
-                        onValueChange={(itemValue) => setRole(itemValue)}
-                        className="form-control"
-                    >
-                        <Picker.Item label="Admin" value="admin" />
-                        <Picker.Item label="User" value="user" />
-                    </Picker>
+                <View style={{ marginTop: 10 }}>
+                    <Text>Ngày sinh:</Text>
+                    <TextInput
+                        value={date}
+                        onChangeText={(text)=>{
+                          setDate(text)
+                        }}
+                        style={{
+                            width: "100%", height: 40, borderWidth: 0.5, marginTop: 5,
+                            borderRadius: 6, paddingLeft: 10
+                        }}
+                        placeholder='Ngày sinh' />
                 </View>
                 {image && <Image source={{ uri: image }}
                     style={{
@@ -126,15 +97,9 @@ export default function EditUser(props) {
                     marginTop: 5, flexDirection: "row",
                     alignItems: "center"
                 }}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            pickImage()
-                        }}>
-                        <Image style={{
-                            width: 30, height: 30
-                        }} source={require("../assets/camera.png")} />
-                    </TouchableOpacity>
-
+                    <Image style={{
+                        width: 30, height: 30
+                    }} source={require("../assets/camera.png")} />
                     <Text style={{ marginLeft: 10 }}>Thêm ảnh </Text>
                 </View>
                 <View style={{ marginTop: 20, flexDirection: "row" }}>
