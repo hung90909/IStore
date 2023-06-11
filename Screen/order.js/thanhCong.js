@@ -5,7 +5,7 @@ import { API_Clothes , API_DetailOrder} from '../../API/getAPI';
 import { useRoute } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import { useIsFocused } from '@react-navigation/native';
-export default function thanhCong(){
+export default function ThanhCong(){
     const nav = useNavigation()
     const [list, setList] = useState([])
     const trangThai = useIsFocused()

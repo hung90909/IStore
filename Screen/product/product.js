@@ -40,7 +40,7 @@ export default function Product() {
             <FlatList
                 data={data}
                 numColumns={2}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item._id}
                 renderItem={({ item }) => {
                     return (
                         <GridView

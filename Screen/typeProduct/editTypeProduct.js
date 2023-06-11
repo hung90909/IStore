@@ -6,7 +6,7 @@ import { API_TypeClothes } from '../../API/getAPI';
 import { useRoute } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
-export default function editTypeProduct(props) {
+export default function EditTypeProduct(props) {
     //  const nav = props.navigation
     const nav = useNavigation();
     const route = useRoute()

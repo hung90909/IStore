@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
 // import 'bootstrap/dist/css/bootstrap.min.css';
-export default function addProduct(props) {
+export default function AddProduct(props) {
     //  const nav = props.navigation
     const nav = useNavigation();
     const route = useRoute()
@@ -19,13 +19,14 @@ export default function addProduct(props) {
     const [price, setPrice] = useState("")
     const [description, setDescription] = useState("")
     const [image, setImage] = useState("")
+    const [sold , setSold] = useState(0)
     const formData = new FormData();
     formData.append("name_product", name_product);
-    formData.append("code_product", code_product);
     formData.append("price", price);
     formData.append("typeProductID", typeProductID);
     formData.append("description", description);
     formData.append("image", image);
+    formData.append("sold", sold);
     const onClear = () => {
         setImage("")
         setName_product("")
@@ -74,18 +75,18 @@ export default function addProduct(props) {
             alignItems: "center", justifyContent: "center",
         }}>
             <View style={{
-                width: "100%", backgroundColor: "white", minHeight: 500,
+                width: "100%", backgroundColor: "white", minHeight: 450,
                 borderRadius: 20, paddingHorizontal: 20
             }}>
                 <Text style={{
                     textAlign: "center", fontWeight: "bold", fontSize: 30, marginTop: 20,
                 }}> Thêm Sản phẩm</Text>
                 <View style={{ marginTop: 20 }}>
-                    <View style={{
+                    {/* <View style={{
                         flexDirection: "row",
                         alignItems: "center",
-                    }}>
-                        <View style={{ width: "25%" }}>
+                    }}> */}
+                        {/* <View style={{ width: "25%" }}>
                             <Text>MÃ SP:</Text>
                             <TextInput
                                 value={code_product}
@@ -97,8 +98,8 @@ export default function addProduct(props) {
                                     borderRadius: 6, paddingLeft: 10
                                 }}
                                 placeholder='Mã SP' />
-                        </View>
-                        <View style={{ width: "70%", marginLeft: 10, marginBottom: 10 }}>
+                        </View> */}
+                        <View style={{ width: "100%", marginBottom: 10 }}>
                             <Text style={{ marginTop: 10 }}>Tên SP:</Text>
                             <TextInput
                                 value={name_product}
@@ -112,7 +113,7 @@ export default function addProduct(props) {
                                 placeholder='Tên SP' />
                         </View>
 
-                    </View>
+                    {/* </View> */}
                     <View style={{ flexDirection: "row", alignItems: "center" }}>
                         <View style={{ width: "25%" }}>
                             <Text style={{}}>Giá SP:</Text>
@@ -139,7 +140,7 @@ export default function addProduct(props) {
                                 <Picker.Item
                                     key={item._id}
                                     label={item.product_type}
-                                    value={item.typeProductID}
+                                    value={item._id}
                                 />
                             ))}
                         </Picker>

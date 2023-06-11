@@ -6,7 +6,7 @@ import { useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
-export default function xacNhan() {
+export default function XacNhan() {
     const nav = useNavigation()
     const [list, setList] = useState([])
     const trangThai = useIsFocused()
@@ -23,7 +23,7 @@ export default function xacNhan() {
     const onXacNhan = (id) =>{
         fetch(API_DetailOrder + "/updateOrder/" + id,{
             method:"PUT",
-            body:JSON.stringify({status: "xac nhan"}),
+            body:JSON.stringify({status: "xac nhan", date : new Date()}),
             headers:{
                 'Content-Type': 'application/json'
             }

@@ -7,7 +7,7 @@ import { useRoute } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import { Picker } from '@react-native-picker/picker';
-export default function editProduct(props) {
+export default function EditProduct(props) {
     //  const nav = props.navigation
     const nav = useNavigation();
     const route = useRoute()
@@ -139,7 +139,7 @@ export default function editProduct(props) {
                                 <Picker.Item
                                     key={item._id}
                                     label={item.product_type}
-                                    value={item.typeProductID}
+                                    value={item._id}
                                 />
                             ))}
                         </Picker>

@@ -6,7 +6,7 @@ import { useRoute } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import { useIsFocused } from '@react-navigation/native';
 
-export default function daHuy(){
+export default function DaHuy(){
     const nav = useNavigation()
     const [list, setList] = useState([])
     const trangThai = useIsFocused()

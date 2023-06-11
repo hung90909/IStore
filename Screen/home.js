@@ -281,7 +281,7 @@ export default function Home(props) {
                         }}>
                         <Image style={{
                             width: 50, height: 50, borderRadius: 20,
-                            right: 20, position: "absolute", bottom: 10
+                            right: 10, position: "absolute", bottom: 10
                         }} source={require("../assets/add-user.png")} />
                     </TouchableOpacity>
                 </Draggable>

@@ -6,7 +6,7 @@ import { API_TypeClothes } from '../../API/getAPI';
 import { useRoute } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
-export default function addTypeProduct(props) {
+export default function AddTypeProduct(props) {
     //  const nav = props.navigation
     const nav = useNavigation();
     // const route = useRoute()
@@ -15,15 +15,15 @@ export default function addTypeProduct(props) {
     const [product_type, setProduct_type] = useState("")
     const [image, setImage] = useState("")
     const [error, setError] = useState("")
-    const [typeProductID , setTypeProductID] = useState("")
+    // const [typeProductID , setTypeProductID] = useState("")
     const formData = new FormData();
     formData.append("product_type", product_type);
-    formData.append("typeProductID", typeProductID);
+    // formData.append("typeProductID", typeProductID);
     formData.append("image", image);
     const onClear = () =>{
         setImage("")
         setProduct_type("")
-        setTypeProductID("")
+        // setTypeProductID("")
     }
     const onAddUser = () => {
         fetch(API_TypeClothes + "/addTypeProduct", {
@@ -70,7 +70,7 @@ export default function addTypeProduct(props) {
             alignItems: "center", justifyContent: "center",
         }}>
             <View style={{
-                width: "100%", backgroundColor: "white", minHeight: 400,
+                width: "100%", backgroundColor: "white", minHeight: 300,
                 borderRadius: 20, paddingHorizontal: 20
             }}>
                 <Text style={{
@@ -81,7 +81,7 @@ export default function addTypeProduct(props) {
                 }}>Loại sản phẩm</Text>
 
                 <View style={{ marginTop: 20 }}>
-                    <Text>Ma sản phẩm:</Text>
+                    {/* <Text>Ma sản phẩm:</Text>
                     <TextInput
                         value={typeProductID}
                         onChangeText={(text) => {
@@ -93,7 +93,7 @@ export default function addTypeProduct(props) {
                         }}
                         placeholder='Ma sản phẩm' />
                         <Text style={{color:"red"}}>{error}</Text>
-                    <Text style={{}}>Tên loại sản phẩm:</Text>
+                    <Text style={{}}>Tên loại sản phẩm:</Text> */}
                     <TextInput
                         value={product_type}
                         onChangeText={(text) => {

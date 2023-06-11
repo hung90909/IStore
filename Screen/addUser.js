@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { API_Clothes } from "../API/getAPI"
 import { useRoute } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
-export default function addUser(props) {
+export default function AddUser(props) {
     const nav = props.navigation
     // const route = useRoute()
     // const {item} = route.params

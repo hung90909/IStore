@@ -11,7 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import { API_TypeClothes } from '../../API/getAPI';
 import { Modal } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native';
-export default function typeProduct() {
+export default function TypeProduct() {
     const [modalVisible, setModalVisible] = useState(false);
     const [selectItem, setSelectItem] = useState()
     const status = useIsFocused()
@@ -93,7 +93,7 @@ export default function typeProduct() {
             <FlatList
                 data={data}
                 numColumns={2}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item._id}
                 renderItem={({ item }) => {
                     return (
                         <GridView
