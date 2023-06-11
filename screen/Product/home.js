@@ -16,7 +16,7 @@ export default function Home(props) {
     const getProduct = () => {
         fetch(API_Product + "/getAllProducts")
             .then(item => item.json())
-            .then(item => setListSP(item))
+            .then(item => setListSP(item)) 
             .catch(err => console.log(err))
     }
 

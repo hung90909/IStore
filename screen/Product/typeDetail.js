@@ -13,8 +13,8 @@ export default function TypeDetail(props) {
     const [data, setData] = useState([])
     const [count , setCount] = useState(1)
     const getAPI = () => {
-        const id = item.typeProductID
-
+        const id = item._id
+        console.log(id)
         fetch(API_TypeProduct + "/getAllProduct", {
             method: "POST",
             body: JSON.stringify({ id: id }),

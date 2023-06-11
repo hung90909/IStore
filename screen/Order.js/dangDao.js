@@ -6,7 +6,7 @@ import { useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
-export default function dangGiao() {
+export default function DangDao() {
     const nav = useNavigation()
     const [list, setList] = useState([])
     const trangThai = useIsFocused()
@@ -29,17 +29,21 @@ export default function dangGiao() {
         getAllXacNhan()
     }, [trangThai])
 
-    const onXacNhan = (id) =>{
-        fetch(API_DetailOrder + "/updateOrder/" + id,{
-            method:"PUT",
-            body:JSON.stringify({status: "da nhan"}),
-            headers:{
+    const onXacNhan = (id) => {
+
+    
+        fetch(API_DetailOrder + "/updateOrder/" + id, {
+            method: "PUT",
+            body: JSON.stringify({ status: "da nhan", date: new Date() }),
+            headers: {
                 'Content-Type': 'application/json'
             }
         })
-        .then(() => nav.navigate("DaGiao"))
-        .catch(err => console.log(err))
+            .then(() => nav.navigate("DaGiao"))
+            .catch(err => console.log(err))
     }
+    
+    
 
     return (
         <View style={{ flex: 1, backgroundColor: "#DCDCDC" }}>

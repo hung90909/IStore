@@ -66,23 +66,29 @@ export default function App() {
     return (
       <Stack.Navigator>
         <Stack.Screen name='Information'  options={{ headerShown: false }} >
-        {(props) => <Information {...props} setIsLogin={setIsLogin} />}
+        {(props) => <Information {...props} setIsLogin={setIsLogin}/>}
         </Stack.Screen>
         <Stack.Screen component={ChangePassword} name='ChangePassword' options={{ title:"Đôi mật khẩu"}}/>
+       
       </Stack.Navigator>
     )
 
   }
   const tabTop = createMaterialTopTabNavigator();
-  function orderTab() {
+  function OrderTab() {
     return (
       <tabTop.Navigator
-      tabBarOptions={{
-        tabStyle: {},
-        labelStyle: { fontSize: 12, fontWeight: 'bold' },
-        indicatorStyle: { backgroundColor: 'tomato' },
-        activeTintColor: 'tomato',
-        inactiveTintColor: 'gray',
+      screenOptions={{
+        tabBarActiveTintColor: 'tomato',
+        tabBarInactiveTintColor: 'gray',
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: 'bold',
+        },
+        tabBarItemStyle: {},
+        tabBarIndicatorStyle: {
+          backgroundColor: 'tomato',
+        },
       }}>
         <tabTop.Screen name="XuLy" component={XuLy} options={{ title: "Xử lý" }} />
         <tabTop.Screen name="DangDao" component={DangDao} options={{ title: "Đang giao" }} />
@@ -105,12 +111,12 @@ export default function App() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === 'Home') {
+          if (route.name === 'HomeTab') {
             iconName = focused
               ? 'home'
               : 'home';
-          } else if (route.name === 'Information') {
-            iconName = focused ? 'ios-list' : 'ios-list-outline';
+          } else if (route.name === 'InformationTab') {
+            iconName = focused ? 'person' : 'person-outline';
           } else if (route.name === "orderTab") {
 
             iconName = focused ? 'clipboard' : 'clipboard-outline';
@@ -122,13 +128,13 @@ export default function App() {
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
       })}>
-        <Tab.Screen name="Home" component={HomeTab} options={{ headerShown: false }} />
+        <Tab.Screen name="HomeTab" component={HomeTab} options={{ headerShown: false , title:"Home"}} />
         <Tab.Screen
           name="orderTab"
-          component={orderTab}
+          component={OrderTab}
           options={{
             headerShown: false,
-            title: "Order",
+            title: "Đơn hàng",
             tabBarBadge: orderCount > 0 ? orderCount.toString() : null,
             tabBarButton: (props) => (
               <TouchableOpacity
@@ -142,7 +148,7 @@ export default function App() {
           }}
         />
 
-        <Tab.Screen name="Information" component={InformationTab} options={{ headerShown: false, tabBarBadge: 3 }} />
+        <Tab.Screen name="InformationTab" component={InformationTab} options={{ headerShown: false, title:"Cá nhân" }} />
       </Tab.Navigator>
 
     )

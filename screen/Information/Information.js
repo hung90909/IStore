@@ -175,6 +175,34 @@ export default function Information(props) {
                         }} source={icon.next} />
                     </View>
                 </TouchableOpacity>
+                <TouchableOpacity 
+                onPress={() =>{
+                    nav.navigate("DaGiao")
+                }}
+                style={{
+                    flexDirection: "row", justifyContent: "space-between", alignItems: "center",
+                    marginTop: 20, paddingHorizontal: 10,
+                }}>
+                    <View style={{
+                        flexDirection: "row", alignItems: "center"
+                    }}>
+                        <Image style={{
+                            width: 20, height: 20, tintColor: "gray"
+                        }} source={icon.order} />
+                        <Text style={{
+                            fontSize: 17, marginStart: 10
+                        }}>Đơn mua </Text>
+                    </View>
+
+                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                        <Text style={{
+                            color:'gray', marginRight:10
+                        }}>Xem lịch sử mua hàng</Text>
+                        <Image style={{
+                            width: 20, height: 20, tintColor: "gray",
+                        }} source={icon.next} />
+                    </View>
+                </TouchableOpacity>
             </View>
             <Text style={{ fontSize: 15, fontWeight: "bold", marginStart: 20, marginTop: 10 }}>Bảo mật</Text>
             <View style={{

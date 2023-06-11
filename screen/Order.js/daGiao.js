@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState, useRef } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, SafeAreaView, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, SafeAreaView, FlatList, Alert } from 'react-native';
 import { API_Buyer, API_Clothes, API_DetailOrder } from '../../API/getAPI';
 import { useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -79,7 +79,8 @@ export default function DaGiao() {
                                 <Text style={{color:"green"}}>Đã giao hàng thành công</Text>
                                 <TouchableOpacity 
                                  onPress={()=>{
-                                    onMua(item._id)
+                                    // onMua(item._id)
+                                    Alert.alert("Thống báo","Chắc năng này đang được bảo trì !")
                                  }}
                                  style={{
                                     width:100 , height:40 , backgroundColor:"red",

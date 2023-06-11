@@ -16,4 +16,5 @@ export default{
      logout : require("../assets/logout.png"),
      name : require("../assets/name.png"),
      camera : require("../assets/camera.png"),
+     order : require("../assets/order.png"),
 }

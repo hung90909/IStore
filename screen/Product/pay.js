@@ -22,22 +22,39 @@ export default function Pay(props) {
   const [giaSP, setGiaSP] = useState(item.price)
   const [nameSP, setNameSP] = useState(item.name_product)
   const [image, setImage] = useState(item.image)
+  // const [sold , setSold] = useState(item.sold)
+  const [date , setDate] = useState('')
 
-  const formData = new FormData();
-  formData.append("ID_KH", ID_KH);
-  formData.append("giaSP", giaSP);
-  formData.append("nameSP", nameSP);
-  formData.append("image", image);
-  formData.append("soluongSP", count);
-  formData.append("ID_Address", checked);
-  formData.append("tongTien", result);
-  formData.append("status", "xu ly"); 
 
-  const onSaveOrder = () => {
+  const onUpdateSold = (id) =>{
+    const sold  = item.sold + 1;
+    fetch(API_Product + "/updateSold/"+id,{
+      method:"PUT",
+      body: JSON.stringify({sold:sold}),
+      headers:{
+        "Content-Type": "application/json"
+      }
+    }).catch(err => console.log(err))
+  }
+
+  const onSaveOrder =   () => {
     if(!checked){
       ToastAndroid.show("Vui lòng thêm địa chỉ !",ToastAndroid.CENTER ,ToastAndroid.LONG)
       return
     }
+    // await increaseSold();
+    let date = new Date()
+    const formData = new FormData();
+    formData.append("ID_KH", ID_KH);
+    formData.append("giaSP", giaSP);
+    formData.append("nameSP", nameSP);
+    formData.append("image", image);
+    formData.append("soluongSP", count);
+    formData.append("ID_Address", checked);
+    formData.append("tongTien", result);
+    formData.append("status", "xu ly"); 
+    formData.append("date", date.toDateString()); 
+
     fetch(API_DetailOrder + "/addOrder", {
       method: "POST",
       body: formData,
@@ -45,6 +62,7 @@ export default function Pay(props) {
         "Content-Type": "multipart/form-data"
       }
     })
+    .then(() => onUpdateSold(item._id))
       .then(() => nav.navigate("Success"))
       .catch(err => console.error(err))
   }

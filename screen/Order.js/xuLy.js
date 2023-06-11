@@ -7,7 +7,7 @@ import { useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
-export default function xuLy() {
+export default function XuLy() {
     const nav = useNavigation()
     const [list, setList] = useState([])
     const trangThai = useIsFocused()
