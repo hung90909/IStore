@@ -57,7 +57,7 @@ async function getTypeProductByID(typeProductID) {
         const typeSP = await typeProduct.find({ typeProductID: typeProductID });
        
         return typeSP;
-    } catch (error) {
+    } catch (error) { 
         console.log(error);
     }
 }

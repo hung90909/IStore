@@ -39,4 +39,10 @@ app.put("/updateAddress/:id", async (req, res) => {
     }
 })
 
+app.get("/deleteAddress/:id" ,async (req , res) =>{
+    console.log(req.params.id)
+   await address.findByIdAndDelete({_id:req.params.id})
+    res.send("xoa thanh cong")
+})
+
 module.exports = app

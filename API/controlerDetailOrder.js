@@ -28,10 +28,11 @@ const upload = multer({
 
 app.post('/getAllOrderXuLy', async (req, res) => {
     try {
-        list = await detailOrder.find({ status: "xu ly" , ID_KH:req.body.id  })
-        if (list) {
-            res.json(list)
-        }
+       const  list = await detailOrder.find({ status: "xu ly" , ID_KH:req.body.id  })
+        const listOrder = list.sort((a, b) => {
+            return  Date.parse(b.date) - Date.parse(a.date) // Sắp xếp theo thời gian tạo ngược (mới nhất lên đầu)
+          });
+          res.json(listOrder);
     } catch (error) {
         console.log(error)
     }
@@ -39,9 +40,10 @@ app.post('/getAllOrderXuLy', async (req, res) => {
 app.get('/getAllOrderXuLyAdmin', async (req, res) => {
     try {
         list = await detailOrder.find({ status: "xu ly" })
-        if (list) {
-            res.json(list)
-        }
+        const listOrder = list.sort((a ,b)=>{
+            return a.date - b.date
+        })
+       res.json(listOrder)
     } catch (error) {
         console.log(error)
     }
@@ -49,9 +51,10 @@ app.get('/getAllOrderXuLyAdmin', async (req, res) => {
 app.post('/getAllOrderHuyDon', async (req, res) => {
     try {
         list = await detailOrder.find({ status: "huy don", ID_KH: req.body.id })
-        if (list) {
-            res.json(list)
-        }
+        const listOrder = list.sort((a ,b)=>{
+            return a.date - b.date
+        })
+       res.json(listOrder)
     } catch (error) {
         console.log(error)
     }
@@ -59,9 +62,10 @@ app.post('/getAllOrderHuyDon', async (req, res) => {
 app.get('/getAllOrderHuyDonAdmin', async (req, res) => {
     try {
         list = await detailOrder.find({ status: "huy don"})
-        if (list) {
-            res.json(list)
-        }
+        const listOrder = list.sort((a ,b)=>{
+            return a.date - b.date
+        })
+       res.json(listOrder)
     } catch (error) {
         console.log(error)
     }
@@ -69,9 +73,10 @@ app.get('/getAllOrderHuyDonAdmin', async (req, res) => {
 app.post('/getAllOrderXacNhan', async (req, res) => {
     try {
         list = await detailOrder.find({ status: "xac nhan",ID_KH:req.body.id })
-        if (list) {
-            res.json(list)
-        }
+        const listOrder = list.sort((a ,b)=>{
+            return a.date - b.date
+        })
+       res.json(listOrder)
     } catch (error) {
         console.log(error)
     }
@@ -79,9 +84,10 @@ app.post('/getAllOrderXacNhan', async (req, res) => {
 app.get('/getAllOrderXacNhanAdmin', async (req, res) => {
     try {
         list = await detailOrder.find({ status: "xac nhan"})
-        if (list) {
-            res.json(list)
-        }
+        const listOrder = list.sort((a ,b)=>{
+            return a.date - b.date
+        })
+       res.json(listOrder)
     } catch (error) {
         console.log(error)
     }
@@ -89,9 +95,10 @@ app.get('/getAllOrderXacNhanAdmin', async (req, res) => {
 app.post('/getAllOrderDaNhan', async (req, res) => {
     try {
         list = await detailOrder.find({ status: "da nhan", ID_KH:req.body.id })
-        if (list) {
-            res.json(list)
-        }
+        const listOrder = list.sort((a ,b)=>{
+            return a.date - b.date
+        })
+       res.json(listOrder)
     } catch (error) {
         console.log(error)
     }
@@ -99,9 +106,10 @@ app.post('/getAllOrderDaNhan', async (req, res) => {
 app.get('/getAllOrderDaNhanAdmin', async (req, res) => {
     try {
         list = await detailOrder.find({ status: "da nhan"})
-        if (list) {
-            res.json(list)
-        }
+        const listOrder = list.sort((a ,b)=>{
+            return a.date - b.date
+        })
+       res.json(listOrder)
     } catch (error) {
         console.log(error)
     }
@@ -111,6 +119,7 @@ app.get('/getAllOrderDaNhanAdmin', async (req, res) => {
 app.post("/addOrder", upload.single("image"), async (req, res) => {
     try {
         const order = new detailOrder(req.body)
+        console.log(order)
         await order.save()
         res.send("them thanh cong")
     } catch (error) {

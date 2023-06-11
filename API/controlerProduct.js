@@ -107,5 +107,14 @@ app.get("/searchProduct", async (req, res) => {
     }
  });
 
+ app.put("/updateSold/:id",async (req , res)=>{
+   try {
+      await product.findByIdAndUpdate({_id:req.params.id},{sold:req.body.sold})
+      res.send("update thanh cong")
+   } catch (error) {
+      console.log(error);
+   }
+ })
+
 
 module.exports = app;

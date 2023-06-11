@@ -10,6 +10,8 @@ const detailOrder = new Schema({
     image : String,
     tongTien : Number,
     status : String,
+    sold: Number,
+    date :Date,
 });
 
 module.exports = mongoose.model("detailOrder", detailOrder);

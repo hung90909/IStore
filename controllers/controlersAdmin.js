@@ -1,5 +1,6 @@
 const Admin = require('../molde/Admin')
 const product = require("../molde/product")
+const typeProduct = require("../molde/TypeProduct")
 const express = require('express')
 const session = require('express-session');
 const multer = require("multer");
@@ -89,7 +90,7 @@ app.post('/login', async (req, res) => {
    try {
       const email = req.body.email;
       const pass = req.body.passWord;
-   
+
       let user = await Admin.findOne({ email: email })
       if (!user) {
          const err = "Email không tồn tại !"
@@ -101,7 +102,7 @@ app.post('/login', async (req, res) => {
          user.comparePassword(req.body.passWord, function (err, isMatch) {
             if (!err && isMatch) {
                // if user is found and password is right create a token
-               let token = jwt.sign({"email":email},"secret" ,{expiresIn: '1h'});
+               let token = jwt.sign({ "email": email }, "secret", { expiresIn: '1h' });
                // console.log("generated token", token);
                res.cookie('token', token, { httpOnly: true });
                req.session.user = {
@@ -141,7 +142,7 @@ function verifyToken(req, res, next) {
 
    jwt.verify(token, "secret", function (err, decoded) {
       if (err) {
-        
+
          return res.redirect('/admin/loginAdmin');
       }
       // console.log("Verified "+decoded);
@@ -212,7 +213,7 @@ app.get("/edit/:id", verifyToken, async (req, res) => {
    }
 
 })
-
+ 
 app.put("/inserUsers/:id", verifyToken, upload.single("image"), async (req, res) => {
    console.log(req.body)
    const { name, email, passWord } = req.body;
@@ -223,7 +224,7 @@ app.put("/inserUsers/:id", verifyToken, upload.single("image"), async (req, res)
    Admin.updateOne({ _id: req.params.id }, { name, email, passWord, image: base64Image })
       .then(() => res.redirect("/admin/getAllUsers"))
       .catch(err => console.error(err))
-})  
+})
 
 app.get("/addUsers", verifyToken, (req, res) => {
    res.render("addUser", {
@@ -275,12 +276,39 @@ app.get("/product", verifyToken, (req, res) => {
 
 //Product
 
-app.get("/getAllProducts", verifyToken, (req, res) => {
-   product.find({}).then(product => {
+async function getTypeProductByID(typeProductID) {
+   try {
+      const typeSP = await typeProduct.find({ _id: typeProductID });
+      return typeSP;
+   } catch (error) {
+      console.log(error);
+   }
+}
+
+app.get("/getAllProducts", verifyToken, async (req, res) => {
+   try {
+      const list = await product.find();
+      const newList = await Promise.all(list.map(async (item) => {
+         const typeProduct = await getTypeProductByID(item.typeProductID);
+         return {
+            productID: item._id,
+            nameLoaiSP: typeProduct.map(item => item.product_type).join(),
+            price: item.price,
+            image: item.image,
+            description: item.description,
+            review: item.review,
+            sold: item.sold,
+            name_product: item.name_product,
+            soLuong: item.soLuong
+         };
+      }))
+
       res.render("managerProduct", {
-         product: product.map(products => products.toJSON())
+         product: newList
       })
-   })
+   } catch (error) {
+      console.log(error);
+   }
 })
 
 app.get("/addProduct", verifyToken, (req, res) => {
@@ -326,7 +354,7 @@ app.post("/inserProduct", verifyToken, upload.single("image"), async (req, res) 
 
 app.get("/deleteProduct/:id", verifyToken, async (req, res) => {
    try {
-      const ps = await product.findByIdAndDelete(req.params.id, req.body)
+      const ps = await product.findByIdAndDelete(req.params.id)
       if (!ps) {
          res.send("not found product")
       } else {
@@ -356,16 +384,24 @@ app.get("/editProduct/:id", verifyToken, async (req, res) => {
 
 app.put("/updateProduct/:id", verifyToken, upload.single("image"), async (req, res) => {
    const { code_product, name_product, price, color, id_KH, name_KH, type_product } = req.body;
-   const imagePath = req.file.path;
-   const image = await jimp.read(imagePath);
-   const base64Image = await image.getBase64Async(jimp.AUTO);
+   if (req.file && req.file.path) {
+      const imagePath = req.file.path;
+      const image = await jimp.read(imagePath);
+      const base64Image = await image.getBase64Async(jimp.AUTO);
+      product.updateOne({ _id: req.params.id }, {
+         code_product, name_product, price, color,
+         id_KH, name_KH, type_product, image: base64Image
+      })
+         .then(() => res.redirect("/admin/getAllProducts"))
+         .catch(err => console.error(err))
+   }else{
+      product.updateOne({ _id: req.params.id }, 
+        req.body
+      )
+         .then(() => res.redirect("/admin/getAllProducts"))
+         .catch(err => console.error(err))
+   }
 
-   product.updateOne({ _id: req.params.id }, {
-      code_product, name_product, price, color,
-      id_KH, name_KH, type_product, image: base64Image
-   })
-      .then(() => res.redirect("/admin/getAllProducts"))
-      .catch(err => console.error(err))
 })
 
 
@@ -381,6 +417,10 @@ app.get("/search", verifyToken, async (req, res) => {
       res.status(500).send(error.message);
    }
 });
+
+
+
+
 
 
 // get Information user

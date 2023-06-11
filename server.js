@@ -10,10 +10,13 @@ const cors = require('cors');
 const http = require('http');
 const API = require("./API/pushAPI")
 const typeProduct = require("./API/controlerTypeProduct")
+const typeProductAdmin = require("./controllers/controlerAdminLoaiSP")
+const order = require("./controllers/controlerOrder")
 const product = require("./API/controlerProduct")
 const buyer = require("./API/controlerBuyer")
 const address = require("./API/controlerAdderss")
 const detailOrder = require("./API/controlerDetailOrder") 
+const doanhThu = require("./controllers/controlerDT")
 const cart = require("./API/controlerCart")
 const app = express();
 app.use(cors());
@@ -61,6 +64,9 @@ app.use("/buyer", buyer)
 app.use("/address", address)
 app.use("/detailOrder", detailOrder)
 app.use("/cart", cart)
+app.use("/typeProductAdmin",typeProductAdmin)
+app.use("/doanhThu",doanhThu)
+app.use("/order",order)
 app.use(express.static('uploads'))
 app.use("/api",API)
 app.listen(port, function () {
