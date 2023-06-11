@@ -35,6 +35,15 @@ app.use(cookieParser());
      console.log(error)
    }
 })
+ app.get("/getDoanhThuServer", async (req, res) => {
+   try {
+    const listOrder =  await order.find({ status: "da nhan" })
+    const monthlyRevenue = calculateMonthlyRevenue(listOrder)
+    res.render("doanhThu/managerDT",{monthlyRevenue})
+   } catch (error) {
+     console.log(error)
+   }
+})
 
 app.get("/getTongDoanhthu" ,async(req , res) =>{
    try {
