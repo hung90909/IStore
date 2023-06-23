@@ -12,7 +12,7 @@ export default function DetailProduct(props) {
     const route = useRoute()
     const nav = props.navigation
     const { item } = route.params;
-    // console.log(item)
+  
     const [data, setData] = useState([])
     const getTopSP = () => {
         fetch(API_Product + "/getTopSP")

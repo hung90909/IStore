@@ -65,7 +65,7 @@ export default function Register(props) {
                     position: "absolute",
                     color: 'gray',
                     top: 130
-                }}>Clothes Shop</Text>
+                }}>IStore</Text>
             </View>
             <View style={{
                 borderRadius: 50,

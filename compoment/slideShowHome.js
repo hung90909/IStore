@@ -7,13 +7,13 @@ export default function SlideShow(){
     return(
         <Swiper autoplay={true} autoplayTimeout={1}>
         <View style={{flex:1 ,}}>
-         <Image style={{width:"100%" , height:"100%"}} source={{uri:"https://marketplace.canva.com/EAFYElY5EE4/1/0/1600w/canva-brown-and-white-modern-fashion-banner-landscape-Ap8IU9nEbh8.jpg"}}/>
+         <Image style={{width:"100%" , height:"100%"}} source={{uri:"https://www.airlinkcommunication.com/media/wysiwyg/Banners/Website-Banner-ip-12.png"}}/>
         </View>
         <View style={{flex:1 , backgroundColor:"yellow"}}>
-         <Image style={{width:"100%" , height:"100%"}} source={{uri:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_J1FlEWKqAGimsFc1ckrkIkvG7GFwPaA6gA&usqp=CAU"}}/>
+         <Image style={{width:"100%" , height:"100%"}} source={{uri:"https://blog.daraz.lk/wp-content/uploads/2020/11/Apple-iPhone-12-Banner.png"}}/>
         </View>
         <View style={{flex:1 , backgroundColor:"black"}}>
-        <Image style={{width:"100%" , height:"100%"}} source={{uri:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8oHFMV_PambyUHDBqIFKmBRuGUKthOYfG5Q&usqp=CAU"}}/>
+        <Image style={{width:"100%" , height:"100%"}} source={{uri:"https://dailytimes.com.pk/assets/uploads/2020/12/11/website-banner-1200x4181-1.png"}}/>
         </View>
       </Swiper>
     )

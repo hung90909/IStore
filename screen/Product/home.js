@@ -24,8 +24,10 @@ export default function Home(props) {
         getTypeProduct()
         getProduct()
     }, [])
+   
     const [data, setData] = useState([])
     const [listSP, setListSP] = useState([])
+
     return (
         <SafeAreaView style={{ backgroundColor: "#DCDCDC" }}>
 
@@ -111,9 +113,8 @@ export default function Home(props) {
                     )
                 }}
             />
-         
-            <FlatList
-                style={{ backgroundColor: "#DCDCDC", maxHeight:480}}
+         <FlatList
+                style={{ backgroundColor: "#DCDCDC", height:450}}
                 data={listSP}
                 numColumns={2}
                 keyExtractor={item => item._id}

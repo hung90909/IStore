@@ -7,6 +7,8 @@ import { useRoute } from '@react-navigation/native';
 export default function GripView(props) {
   const route = useRoute()
   const { item, onPress } = props
+
+
   function formatNumber(num) {
     if (num >= 1000) {
       return (num / 1000).toFixed(1) + 'k';
@@ -14,6 +16,7 @@ export default function GripView(props) {
       return num;
     }
   }
+  
 
 
   return (
@@ -24,7 +27,7 @@ export default function GripView(props) {
         margin: 10
       }}>
       <Image style={{
-        width: "100%", height: "70%"
+        width: "100%", height: "60%"
       }} source={{ uri: item.image }} />
 
       <Text style={{
@@ -50,6 +53,15 @@ export default function GripView(props) {
         <Text style={{ color: "red" }}>50%</Text>
         <Text style={{ color: "white" }}>GIẢM</Text>
       </View>
+      {item.soLuongSP <= 0 && <View style={{
+                    position:"absolute", top:60,
+                    height:40, width:"100%", backgroundColor:"black", borderWidth:2,
+                    borderColor:"white", justifyContent:"center", alignItems:"center"
+                }}>
+                    <Text style={{
+                        color:"white", fontWeight:"bold"
+                    }}>Đã hết hàng </Text>
+                </View> }
     </TouchableOpacity>
   )
-}
+}  

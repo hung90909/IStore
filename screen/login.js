@@ -62,7 +62,7 @@ export default function Login(props) {
                     position: "absolute",
                     color: 'gray',
                     top: 150
-                }}>Clothes Shop</Text>
+                }}>IStore</Text>
             </View>
             <View style={{
                 borderRadius: 50,

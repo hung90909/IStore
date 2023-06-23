@@ -8,11 +8,14 @@ import { useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RadioButton } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
+import PushNotification from 'react-native-push-notification';
+
 export default function Pay(props) {
   const nav = props.navigation
   const [address, setAddress] = useState([])
   const route = useRoute()
   const { item, selectedItems  } = route.params
+  
 
   const status = useIsFocused()
   const [result, setResult] = useState("")
@@ -22,15 +25,29 @@ export default function Pay(props) {
   const [giaSP, setGiaSP] = useState(item.price)
   const [nameSP, setNameSP] = useState(item.name_product)
   const [image, setImage] = useState(item.image)
-  // const [sold , setSold] = useState(item.sold)
+  const [soLuongSP , setSoLuongSP] = useState(item.soLuongSP - count)
+  const [ID_Product , setIDProduct] = useState(item._id)
   const [date , setDate] = useState('')
 
 
   const onUpdateSold = (id) =>{
-    const sold  = item.sold + 1;
+    const sold  = item.sold + count;
     fetch(API_Product + "/updateSold/"+id,{
       method:"PUT",
       body: JSON.stringify({sold:sold}),
+      headers:{
+        "Content-Type": "application/json"
+      }
+    }).catch(err => console.log(err))
+  }
+
+
+
+  const updateSoLuongSP = (id) =>{
+    const soLuongSP = item.soLuongSP - count
+    fetch(API_Product + "/updateSoLuongSP/"+id,{
+      method:"PUT",
+      body: JSON.stringify({soLuongSP}),
       headers:{
         "Content-Type": "application/json"
       }
@@ -42,6 +59,11 @@ export default function Pay(props) {
       ToastAndroid.show("Vui lòng thêm địa chỉ !",ToastAndroid.CENTER ,ToastAndroid.LONG)
       return
     }
+    if(item.soLuongSP <= 0 ){
+      ToastAndroid.show("Sản phẩm đã hết !",ToastAndroid.CENTER ,ToastAndroid.LONG)
+      return
+    }
+
     // await increaseSold();
     let date = new Date()
     const formData = new FormData();
@@ -53,7 +75,9 @@ export default function Pay(props) {
     formData.append("ID_Address", checked);
     formData.append("tongTien", result);
     formData.append("status", "xu ly"); 
+    formData.append("ID_Product", ID_Product); 
     formData.append("date", date.toDateString()); 
+    formData.append("review", 0); 
 
     fetch(API_DetailOrder + "/addOrder", {
       method: "POST",
@@ -192,6 +216,7 @@ export default function Pay(props) {
         <TouchableOpacity
           onPress={() => {
             onSaveOrder()
+            updateSoLuongSP(item._id)
 
           }}
           style={{

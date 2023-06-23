@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useEffect } from 'react';
 import Login from './screen/login';
 import Register from './screen/register';
 import Home from './screen/Product/home';
@@ -24,14 +25,30 @@ import DetailProduct from './screen/Product/detailProduct';
 import Cart from './screen/CartProduct/cart';
 import ListSearch from './screen/Product/listSearch';
 import ChangePassword from './screen/changePassword';
-
+import { Platform, NativeModules } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [orderCount, setOrderCount] = useState(0);
   const [isLogin, setIsLogin] = useState(true)
+  
+  // const createNotificationChannel = () => {
+  //   if (Platform.OS === 'android') {
+  //     const { NotificationChannel } = NativeModules;
+  
+  //     NotificationChannel.createNotificationChannel({
+  //       id: 'channel9090', // ID của kênh thông báo
+  //       name: 'Tên kênh', // Tên kênh
+  //       description: 'Mô tả kênh', // Mô tả kênh
+  //       importance: 'high', // Mức độ ưu tiên của kênh
+  //     });
+  //   }
+  // };
 
+  // useEffect(() =>{
+  //   createNotificationChannel()
+  // },[])
   function LoginTab() {
     return (
       <Stack.Navigator initialRouteName='Login'>
