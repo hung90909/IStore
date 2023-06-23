@@ -11,7 +11,7 @@ export default function Product() {
     const status = useIsFocused()
     const nav = useNavigation()
     const [data, setData] = useState([])
-    const [loaiSP  , setLoaiSP] = useState([])
+    const [loaiSP, setLoaiSP] = useState([])
     const getAPI = () => {
         fetch(API_Product + "/getAllProducts")
             .then(item => item.json())
@@ -36,7 +36,7 @@ export default function Product() {
             .catch(err => console.log(err))
     }
     return (
-        <SafeAreaView style={{flex:1}}>
+        <SafeAreaView style={{ flex: 1 }}>
             <FlatList
                 data={data}
                 numColumns={2}
@@ -45,23 +45,22 @@ export default function Product() {
                     return (
                         <GridView
                             onDetail={() => {
-                                nav.navigate("DetailProduct", { item , loaiSP })
+                                nav.navigate("DetailProduct", { item, loaiSP })
                             }}
                             onDelete={onDelete}
-                            item={item} />
-
+                            item={item} soLuongSP={item.soLuongSP} />
                     )
                 }}
             />
             <TouchableOpacity
-            onPress={() =>{
-                nav.navigate("addProduct",{loaiSP})
-            }}
+                onPress={() => {
+                    nav.navigate("addProduct", { loaiSP })
+                }}
             >
                 <Image style={{
-                    width:50 , height:50 , position:"absolute"
-                    ,bottom:20 , right:20
-                }} source={require("../../assets/addProduct.png")}/>
+                    width: 50, height: 50, position: "absolute"
+                    , bottom: 20, right: 20
+                }} source={require("../../assets/addProduct.png")} />
             </TouchableOpacity>
         </SafeAreaView>
 

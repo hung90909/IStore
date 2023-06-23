@@ -5,6 +5,8 @@ import React, { useState, useEffect } from 'react';
 import { API_Product } from '../../API/getAPI';
 import { useRoute } from '@react-navigation/native';
 import FiveStar from './FiveStar';
+
+//../../assets/delete.png
 export default function DetailProduct(props) {
     const nav = props.navigation;
     const route = useRoute()

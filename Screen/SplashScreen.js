@@ -38,12 +38,9 @@ function SplashScreen({navigation}) {
       <Animated.View style={{ opacity: fadeAnim }}>
         <Image source={require("../assets/logo.png")} style={{}} />
         <Text style={{ fontSize: 30, position: 'absolute', bottom: 5, 
-      left:55 }}>
+      left:105 }}>
           <Animated.Text style={{ color: '#337ab7', fontWeight: 'bold' }}>
-            Clothes{' '}
-          </Animated.Text>
-          <Animated.Text style={{ color: 'gray', fontWeight: 'bold' }}>
-            Shop
+            IStore{' '}
           </Animated.Text>
         </Text>
       </Animated.View>

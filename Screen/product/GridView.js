@@ -3,9 +3,12 @@ import { View, Text, ScrollView, FlatList, Image, TouchableOpacity } from 'react
 import CustomAlert from '../../componet/customAlert';
 import FiveStar from './FiveStar';
 import  { useState, useEffect } from 'react';
+import { API_Product } from '../../API/getAPI';
 export default function GridView(props) {
     const [alertVisible, setAlertVisible] = useState(false);
-    const { item, onDelete, onDetail } = props;
+    // const [listSP , setListSP] = useState([])
+    // const [soLuong , setSoLuong] = useState()
+    const { item, onDelete, onDetail , soLuongSP } = props;
     const handleDeleteUser = () => {
         setAlertVisible(true);
     };
@@ -13,6 +16,21 @@ export default function GridView(props) {
     const handleCancelPressed = () => {
         setAlertVisible(false);
     };
+
+    // const getSP = () => {
+    //    fetch(API_Product + '/getAllProducts')
+    //    .then(item => item.json())
+    //    .then(item => setListSP(item))
+    //    .catch(err => console.log(err))
+    // }
+    // const getSoluongSP = () =>{
+    //    const soLuong =   listSP.map(item => item.soLuongSP)
+    //    setSoLuong(soLuong)
+    // }
+
+    // useEffect(() => {
+    //     getSP()
+    // },[])
     // const {url , name , price , isChecked , star , reviews , description} = props.item;
     return (
         <TouchableOpacity
@@ -81,6 +99,15 @@ export default function GridView(props) {
 
                     </View>
                 </View>
+               {soLuongSP <= 0 && <View style={{
+                    position:"absolute", top:60,
+                    height:40, width:"100%", backgroundColor:"black", borderWidth:2,
+                    borderColor:"white", justifyContent:"center", alignItems:"center"
+                }}>
+                    <Text style={{
+                        color:"white", fontWeight:"bold"
+                    }}>Đã hết hàng </Text>
+                </View> }
             </View>
             <CustomAlert
                 visible={alertVisible}

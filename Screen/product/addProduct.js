@@ -19,7 +19,8 @@ export default function AddProduct(props) {
     const [price, setPrice] = useState("")
     const [description, setDescription] = useState("")
     const [image, setImage] = useState("")
-    const [sold , setSold] = useState(0)
+    const [sold, setSold] = useState(0)
+    const [soLuongSP , setSoLuongSP] = useState("")
     const formData = new FormData();
     formData.append("name_product", name_product);
     formData.append("price", price);
@@ -27,6 +28,8 @@ export default function AddProduct(props) {
     formData.append("description", description);
     formData.append("image", image);
     formData.append("sold", sold);
+    formData.append("soLuongSP", soLuongSP);
+    formData.append("review", 0);
     const onClear = () => {
         setImage("")
         setName_product("")
@@ -75,43 +78,26 @@ export default function AddProduct(props) {
             alignItems: "center", justifyContent: "center",
         }}>
             <View style={{
-                width: "100%", backgroundColor: "white", minHeight: 450,
+                width: "100%", backgroundColor: "white", minHeight: 500,
                 borderRadius: 20, paddingHorizontal: 20
             }}>
                 <Text style={{
                     textAlign: "center", fontWeight: "bold", fontSize: 30, marginTop: 20,
                 }}> Thêm Sản phẩm</Text>
                 <View style={{ marginTop: 20 }}>
-                    {/* <View style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                    }}> */}
-                        {/* <View style={{ width: "25%" }}>
-                            <Text>MÃ SP:</Text>
-                            <TextInput
-                                value={code_product}
-                                onChangeText={(text) => {
-                                    setCode_product(text);
-                                }}
-                                style={{
-                                    width: "100%", height: 40, borderWidth: 0.5, marginTop: 5,
-                                    borderRadius: 6, paddingLeft: 10
-                                }}
-                                placeholder='Mã SP' />
-                        </View> */}
-                        <View style={{ width: "100%", marginBottom: 10 }}>
-                            <Text style={{ marginTop: 10 }}>Tên SP:</Text>
-                            <TextInput
-                                value={name_product}
-                                onChangeText={(text) => {
-                                    setName_product(text);
-                                }}
-                                style={{
-                                    width: "100%", height: 40, borderWidth: 0.5, marginTop: 5,
-                                    borderRadius: 6, paddingLeft: 10
-                                }}
-                                placeholder='Tên SP' />
-                        </View>
+                    <View style={{ width: "100%", marginBottom: 10 }}>
+                        <Text style={{ marginTop: 10 }}>Tên SP:</Text>
+                        <TextInput
+                            value={name_product}
+                            onChangeText={(text) => {
+                                setName_product(text);
+                            }}
+                            style={{
+                                width: "100%", height: 40, borderWidth: 0.5, marginTop: 5,
+                                borderRadius: 6, paddingLeft: 10
+                            }}
+                            placeholder='Tên SP' />
+                    </View>
 
                     {/* </View> */}
                     <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -147,8 +133,16 @@ export default function AddProduct(props) {
 
                     </View>
 
-
-
+                    <Text style={{marginTop:10}}>Số lượng: </Text>
+                    <TextInput placeholder='Số lượng'
+                    style={{
+                        height:40 , width:"100%", borderRadius:6 , borderWidth:0.5,
+                        marginTop:5, paddingStart:10
+                    }}
+                    onChangeText={(text)=>{
+                        setSoLuongSP(text);
+                    }}
+                    />
                     <Text style={{ marginTop: 10 }}>Mô tả:</Text>
                     <TextInput
                         multiline={true}

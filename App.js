@@ -27,6 +27,7 @@ import EditTypeProduct from './Screen/typeProduct/editTypeProduct';
 import AddProduct from './Screen/product/addProduct';
 import EditProduct from './Screen/product/editProduct';
 import TypeProduct from './Screen/typeProduct/typeProduct';
+import Top3SP from './Screen/thongKeDoanhThu/top3SP';
 
 const Tab = createBottomTabNavigator()
 
@@ -86,6 +87,27 @@ export default function App() {
   }
   
   const TabTop = createMaterialTopTabNavigator();
+
+  function ThongKeNagator(){
+    return(
+      <TabTop.Navigator 
+      screenOptions={{
+        tabBarActiveTintColor: 'tomato',
+        tabBarInactiveTintColor: 'gray',
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: 'bold',
+        },
+        tabBarItemStyle: {},
+        tabBarIndicatorStyle: {
+          backgroundColor: 'tomato',
+        },
+      }}>
+        <TabTop.Screen name='thongKe' component={ThongKe} options={{title:"Doanh thu"}}/>
+        <TabTop.Screen name='TopSP' component={Top3SP} options={{title:"Top sản Phẩm"}}/>
+      </TabTop.Navigator>
+    )
+  }
   
   function ProductNavigator() {
     return (
@@ -136,13 +158,7 @@ export default function App() {
     );
   }
   
-  function ThongKeNagator(){
-    return(
-      <Stack.Navigator >
-        <Stack.Screen name='thongKe' component={ThongKe} options={{headerShown:false}}/>
-      </Stack.Navigator>
-    )
-  }
+
   
   function MainNavigator() {
     return (
@@ -158,7 +174,7 @@ export default function App() {
               iconName = focused ? 'shopping-cart' : 'shopping-basket';
             } else if (route.name === 'Order'){
               iconName = focused ? 'file-text-o' : 'file-text-o';
-            } else if (route.name === 'DoanhThu'){
+            } else if (route.name === 'Thống kê'){
               iconName = focused ? 'line-chart' : 'line-chart';
             }
 
@@ -171,7 +187,7 @@ export default function App() {
         <Tab.Screen name='User' component={UserMain} options={{ headerShown: false }} />
         <Tab.Screen name='Product_' component={ProductNavigator} options={{ headerShown: false }} />
         <Tab.Screen name='Order' component={OrderNagator} options={{ headerShown: false }} />
-        <Tab.Screen name='DoanhThu' component={ThongKeNagator} options={{ headerShown: false }} />
+        <Tab.Screen name='Thống kê' component={ThongKeNagator} options={{ headerShown: false }} />
       </Tab.Navigator>
     )
   }
