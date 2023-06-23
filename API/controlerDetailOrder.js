@@ -119,7 +119,6 @@ app.get('/getAllOrderDaNhanAdmin', async (req, res) => {
 app.post("/addOrder", upload.single("image"), async (req, res) => {
     try {
         const order = new detailOrder(req.body)
-        console.log(order)
         await order.save()
         res.send("them thanh cong")
     } catch (error) {
@@ -137,5 +136,25 @@ app.put("/updateOrder/:id",upload.single("image"), async (req, res) => {
         console.log(error)
     }
 })
+
+app.put("/updateReview/:id",async (req , res) =>{
+    try {
+        await detailOrder.findByIdAndUpdate({_id:req.params.id},{review:req.body.review})
+        res.send("udpate thanh cong")
+    } catch (error) {
+        console.log(error);
+    }
+ })
+
+ app.get("/getReviews/:id", async (req, res) => {
+    try {
+       const orderId = req.params.id;
+       const order = await detailOrder.find({ID_Product: orderId});
+        res.json(order);
+    } catch (error) {
+       console.log(error);
+    }
+ });
+ 
 
 module.exports = app

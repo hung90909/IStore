@@ -54,8 +54,7 @@ app.post('/getAllCart', async (req, res) => {
 
 async function getTypeProductByID(typeProductID) {
     try {
-        const typeSP = await typeProduct.find({ typeProductID: typeProductID });
-       
+        const typeSP = await typeProduct.find({ _id: typeProductID });
         return typeSP;
     } catch (error) { 
         console.log(error);

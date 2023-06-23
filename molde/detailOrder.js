@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const detailOrder = new Schema({
     ID_KH: String,
     ID_Address: String,
+    ID_Product: String,
     nameSP: String,
     giaSP: String,
     soluongSP: String,
@@ -12,6 +13,7 @@ const detailOrder = new Schema({
     status : String,
     sold: Number,
     date :Date,
+    review: Number,
 });
 
 module.exports = mongoose.model("detailOrder", detailOrder);

@@ -95,6 +95,19 @@ app.get("/getTopSP", async (req , res) =>{
         console.log(error);
     }
 })
+app.get("/getUnderSP", async (req , res) =>{
+    try {
+     const sp =  await product.find()
+     const listSP = sp.sort((a ,b)=>{
+         return a.sold - b.sold
+     })
+    const underSP =  listSP.slice(0, 7)
+     res.json(underSP)
+    
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 app.get("/searchProduct", async (req, res) => {
     try {
@@ -116,5 +129,22 @@ app.get("/searchProduct", async (req, res) => {
    }
  })
 
+ app.put("/updateSoLuongSP/:id",async (req , res)=>{
+    try {
+        await product.findByIdAndUpdate({_id:req.params.id},{soLuongSP:req.body.soLuongSP})
+        res.send("udpate thanh cong")
+    } catch (error) {
+        console.log(error);
+    }
+ })
+
+app.put("/updateProductReview/:id",async(req, res) => {
+   try {
+      await product.findByIdAndUpdate({_id:req.params.id},{review: req.body.review})
+      res.send("udpate thanh cong")
+   } catch (error) {
+      console.log(error);
+   }
+}) 
 
 module.exports = app;

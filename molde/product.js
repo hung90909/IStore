@@ -9,6 +9,7 @@ const product = new Schema({
     review : Number,
     sold: Number,
     typeProductID:String,
+    soLuongSP: Number,
   });
 
 module.exports = mongoose.model("product",product);

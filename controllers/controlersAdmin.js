@@ -299,7 +299,7 @@ app.get("/getAllProducts", verifyToken, async (req, res) => {
             review: item.review,
             sold: item.sold,
             name_product: item.name_product,
-            soLuong: item.soLuong
+            soLuongSP: item.soLuongSP
          };
       }))
 
@@ -319,12 +319,9 @@ app.get("/addProduct", verifyToken, (req, res) => {
 
 app.post("/inserProduct", verifyToken, upload.single("image"), async (req, res) => {
    try {
-      const code_product = req.body.code_product;
       const name_product = req.body.name_product;
       const price = req.body.price;
-      const color = req.body.color;
-      const id_KH = req.body.id_KH;
-      const name_KH = req.body.name_KH;
+      const soLuongSP = req.body.soLuongSP
       const type_product = req.body.type_product;
       if (req.file && req.file.path) {
          // thực hiện đoạn code khi có path
@@ -332,16 +329,15 @@ app.post("/inserProduct", verifyToken, upload.single("image"), async (req, res) 
          const img = await jimp.read(imagePath);
          const baseImage = await img.getBase64Async(jimp.AUTO)
          const sp = new product({
-            code_product, name_product, price, color, id_KH, name_KH, type_product,
-            image: baseImage
+            name_product, price, type_product,
+            image: baseImage , soLuongSP , review : 0 , sold: 0
          });
          await sp.save();
          res.redirect('/admin/getAllProducts');
       } else {
          // thực hiện đoạn code khi không có path
          const sp = new product({
-            code_product, name_product, price, color, id_KH, name_KH, type_product,
-            image: ""
+            name_product, price, soLuongSP , review: 0 ,sold: 0 
          });
          await sp.save();
          res.redirect('/admin/getAllProducts');

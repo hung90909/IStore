@@ -1,7 +1,7 @@
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="/admin/getAllUsers">Shop Clothes</a>
+            <a class="navbar-brand" href="/admin/getAllUsers">IStore</a>
         </div>
         <ul class="nav navbar-nav">
             <li> <a href="/admin/getAllUsers">User</a></li>
@@ -41,6 +41,7 @@
             <th>Giá</th>
             <th>Hình Ảnh</th>
             <th>Loại SP</th>
+            <th>Số lượng SP</th>
             <th></th>
         </tr>
     </thead>
@@ -53,12 +54,13 @@
             <td><img src="{{this.image}}" style="width: 50px; height: 50px; border-radius: 50%;
                 border-color: black; border-width: 10px;" /></td>
             <td>{{this.nameLoaiSP}}</td>
-
+             <td>{{this.soLuongSP}}</td>
             <td>
                 <a href="/admin/editProduct/{{this.productID}}" class="btn btn-primary">Edit</a>
                 <a href="/admin/deleteProduct/{{this.productID}}"
                     onclick="return confirm('Bạn có chắc muốn xóa không ?')" class="btn btn-danger">Delete</a>
             </td>
+          
         </tr>
         {{/each}}
     </tbody>
